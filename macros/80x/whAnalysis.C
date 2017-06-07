@@ -40,16 +40,24 @@ void whAnalysis(
 
   
   // Data files
+  infileName_.push_back(Form("%sSingleElectron.root"  ,  filesPathDA.Data()));  infileCat_.push_back(0);
+  infileName_.push_back(Form("%sSingleMuon.root"      ,  filesPathDA.Data()));  infileCat_.push_back(0);
   
   // MC files
-  infileName_.push_back(Form("%sTTbar_Powheg.root"   ,  filesPathMC.Data()));  infileCat_.push_back(1);
-  infileName_.push_back(Form("%sWJets_EWKWPlus.root" ,  filesPathMC.Data()));  infileCat_.push_back(2);
-  infileName_.push_back(Form("%sWJets_EWKWMinus.root",  filesPathMC.Data()));  infileCat_.push_back(2);
-  infileName_.push_back(Form("%sWJets_nlo.root"      ,  filesPathMC.Data()));  infileCat_.push_back(3);
-  infileName_.push_back(Form("%sZJets_nlo.root"      ,  filesPathMC.Data()));  infileCat_.push_back(4);
-  infileName_.push_back(Form("%sDiboson_wz.root"     ,  filesPathMC.Data()));  infileCat_.push_back(5);
-  infileName_.push_back(Form("%sDiboson_zz.root"     ,  filesPathMC.Data()));  infileCat_.push_back(6);
-  //infileName_.push_back(Form("%sDiboson_ww.root"     ,  filesPathMC.Data()));  infileCat_.push_back(7);
+  infileName_.push_back(Form("%sTTbar_Powheg.root"    ,  filesPathMC.Data()));  infileCat_.push_back(1);
+  infileName_.push_back(Form("%sSingleTop_tG.root"    ,  filesPathMC.Data()));  infileCat_.push_back(1);
+  infileName_.push_back(Form("%sSingleTop_tT.root"    ,  filesPathMC.Data()));  infileCat_.push_back(1);
+  infileName_.push_back(Form("%sSingleTop_tTbar.root" ,  filesPathMC.Data()));  infileCat_.push_back(1);
+  infileName_.push_back(Form("%sSingleTop_tW.root"    ,  filesPathMC.Data()));  infileCat_.push_back(1);
+  infileName_.push_back(Form("%sSingleTop_tbarW.root" ,  filesPathMC.Data()));  infileCat_.push_back(1);
+  
+  infileName_.push_back(Form("%sWJets_EWKWPlus.root"  ,  filesPathMC.Data()));  infileCat_.push_back(2);
+  infileName_.push_back(Form("%sWJets_EWKWMinus.root" ,  filesPathMC.Data()));  infileCat_.push_back(2);
+  infileName_.push_back(Form("%sWJets_nlo.root"       ,  filesPathMC.Data()));  infileCat_.push_back(3);
+  infileName_.push_back(Form("%sZJets_nlo.root"       ,  filesPathMC.Data()));  infileCat_.push_back(4);
+  infileName_.push_back(Form("%sDiboson_wz.root"      ,  filesPathMC.Data()));  infileCat_.push_back(5);
+  infileName_.push_back(Form("%sDiboson_zz.root"      ,  filesPathMC.Data()));  infileCat_.push_back(6);
+  infileName_.push_back(Form("%sDiboson_ww.root"      ,  filesPathMC.Data()));  infileCat_.push_back(7);
 
   // Process types
   categoryName_.push_back("Data");
@@ -70,22 +78,49 @@ void whAnalysis(
   lepString_.push_back("m");
   lepString_.push_back("l");
 
-
-  
   //Declaration of leaves types
   Int_t nJet, nJot, nLooseLep, nLooseElectron, nLooseMuon, nTightLep, nTightElectron, nTightMuon, looseLep1PdgId, looseLep2PdgId, looseLep1IsTight, looseLep2IsTight, nTau, jot1VBFID, jetNMBtags, nB, isGS, looseLep1IsHLTSafe, looseLep2IsHLTSafe, runNumber, lumiNumber, npv, pu, trigger, metFilter, egmFilter, genTopIsHad, genAntiTopIsHad, nIsoJet, jet1Flav, jet1IsTight, jet2Flav, isojet1Flav, isojet2Flav, jetNBtags, isojetNBtags, nFatjet, nHF, nLoosePhoton, nTightPhoton, loosePho1IsTight;
   Float_t jot1Phi, jot1Pt, jot1GenPt, jot1Eta, jot2Phi, jot2Pt, jot2GenPt, jot2Eta, jot12DPhi, jot12Mass, jot12DEta, pfmetUp, pfmetDown, pfUWmagUp, pfUZmagUp, pfUAmagUp, pfUmagUp, pfUWmagDown, pfUZmagDown, pfUAmagDown, pfUmagDown, jot1EtaUp, jot1EtaDown, jot1PtUp, jot1PtDown, jot2PtUp, jot2PtDown, jot12MassUp, jot12DEtaUp, jot12DPhiUp, jot12MassDown, jot12DEtaDown, jot12DPhiDown, jot2EtaUp, jot2EtaDown, scale[6], sf_btag0, sf_btag1, sf_btag2, sf_btagGT0, sf_sjbtag0, sf_sjbtag1, sf_sjbtag2, sf_sjbtagGT0, sf_btag0BUp, sf_btag1BUp, sf_btag2BUp, sf_btagGT0BUp, sf_sjbtag0BUp, sf_sjbtag1BUp, sf_sjbtag2BUp, sf_sjbtagGT0BUp, sf_btag0BDown, sf_btag1BDown, sf_btag2BDown, sf_btagGT0BDown, sf_sjbtag0BDown, sf_sjbtag1BDown, sf_sjbtag2BDown, sf_sjbtagGT0BDown, sf_btag0MUp, sf_btag1MUp, sf_btag2MUp, sf_btagGT0MUp, sf_sjbtag0MUp, sf_sjbtag1MUp, sf_sjbtag2MUp, sf_sjbtagGT0MUp, sf_btag0MDown, sf_btag1MDown, sf_btag2MDown, sf_btagGT0MDown, sf_sjbtag0MDown, sf_sjbtag1MDown, sf_sjbtag2MDown, sf_sjbtagGT0MDown, sf_metTrigZmm, sf_qcdV_VBF, pfmetRaw, mcWeight, normalizedWeight, filter_maxRecoil, filter_whichRecoil, sf_ewkV, sf_qcdV, sf_ewkV2j, sf_qcdV2j, sf_qcdTT, sf_lepID, sf_lepIso, sf_lepTrack, sf_pho, sf_eleTrig, sf_phoTrig, sf_metTrig, sf_pu, sf_npv, sf_tt, sf_tt_ext, sf_tt_bound, sf_tt8TeV, sf_tt8TeV_ext, sf_tt8TeV_bound, sf_phoPurity, pfmet, pfmetphi, pfmetnomu, puppimet, puppimetphi, calomet, calometphi, pfcalobalance, sumET, trkmet, puppiUWmag, puppiUWphi, puppiUZmag, puppiUZphi, puppiUAmag, puppiUAphi, puppiUperp, puppiUpara, puppiUmag, puppiUphi, pfUWmag, pfUWphi, pfUZmag, pfUZphi, pfUAmag, pfUAphi, pfUperp, pfUpara, pfUmag, pfUphi, dphipfmet, dphipuppimet, dphipuppiUW, dphipuppiUZ, dphipuppiUA, dphipfUW, dphipfUZ, dphipfUA, dphipuppiU, dphipfU, trueGenBosonPt, genBosonPt, genBosonEta, genBosonMass, genBosonPhi, genWPlusPt, genWMinusPt, genWPlusEta, genWMinusEta, genTopPt, genTopEta, genAntiTopPt, genAntiTopEta, genTTPt, genTTEta, jet1Phi, jet1Pt, jet1GenPt, jet1Eta, jet1CSV, jet2Phi, jet2Pt, jet2GenPt, jet2Eta, jet2CSV, isojet1Pt, isojet1CSV, isojet2Pt, isojet2CSV, loosePho1Pt, loosePho1Eta, loosePho1Phi, looseLep1Pt, looseLep1Eta, looseLep1Phi, looseLep2Pt, looseLep2Eta, looseLep2Phi, diLepMass, mT, scaleUp, scaleDown, pdfUp, pdfDown;
   ULong64_t eventNumber;
   
+  //*******************************************************
   // Set up histograms
+  //*******************************************************
+  // This part really sucks right now
+  // Need to do something more Guillelmo style  :-)
   char output[200];
   sprintf(output,"MitWHAnalysis/plots%s/histo_wh_nice.root",subdirectory.c_str());
   TFile *output_plots = new TFile(output,"RECREATE");
+  // declare preselection plots
   TH1D *histo_mT_presel[jet_categories][process_types][3];
+  TH1D *histo_npv_presel[jet_categories][process_types][3];
+  TH1D *histo_ptl1_presel[jet_categories][process_types][3];
+  // declare signal selection plots
+  TH1D *histo_mT_sigsel[jet_categories][process_types][3];
+  TH1D *histo_ptl1_sigsel[jet_categories][process_types][3];
   for(unsigned int i_jet=0; i_jet<jet_categories; i_jet++) { for(unsigned int i_type=0; i_type<process_types; i_type++) { for(unsigned int i_flav=0; i_flav<3; i_flav++) {
+      // instantiate preselection plots
       histo_mT_presel[i_jet][i_type][i_flav] = new TH1D(
         Form("histo_mT_presel_%s_%s_%d", jetString_[i_jet].Data(), lepString_[i_flav].Data(), i_type),
         Form("preselection m_{T} for %s (%s channel, %s)", categoryName_[i_type].Data(), lepString_[i_flav].Data(), jetString_[i_jet].Data()),
+      200, 0, 1000);
+      histo_npv_presel[i_jet][i_type][i_flav] = new TH1D(
+        Form("histo_npv_presel_%s_%s_%d", jetString_[i_jet].Data(), lepString_[i_flav].Data(), i_type),
+        Form("preselection npv for %s (%s channel, %s)", categoryName_[i_type].Data(), lepString_[i_flav].Data(), jetString_[i_jet].Data()),
+      100, 0, 100);
+      histo_ptl1_presel[i_jet][i_type][i_flav] = new TH1D(
+        Form("histo_ptl1_presel_%s_%s_%d", jetString_[i_jet].Data(), lepString_[i_flav].Data(), i_type),
+        Form("preselection lepton1  p_{T} for %s (%s channel, %s)", categoryName_[i_type].Data(), lepString_[i_flav].Data(), jetString_[i_jet].Data()),
+      200, 0, 1000);
+
+      // instantiate signal selection plots
+      histo_mT_sigsel[i_jet][i_type][i_flav] = new TH1D(
+        Form("histo_mT_sigsel_%s_%s_%d", jetString_[i_jet].Data(), lepString_[i_flav].Data(), i_type),
+        Form("sig. selection m_{T} for %s (%s channel, %s)", categoryName_[i_type].Data(), lepString_[i_flav].Data(), jetString_[i_jet].Data()),
+      200, 0, 1000);
+      histo_ptl1_sigsel[i_jet][i_type][i_flav] = new TH1D(
+        Form("histo_ptl1_sigsel_%s_%s_%d", jetString_[i_jet].Data(), lepString_[i_flav].Data(), i_type),
+        Form("sig. selection lepton1  p_{T} for %s (%s channel, %s)", categoryName_[i_type].Data(), lepString_[i_flav].Data(), jetString_[i_jet].Data()),
       200, 0, 1000);
 
   }}}
@@ -138,49 +173,6 @@ void whAnalysis(
     //the_input_tree->SetBranchAddress("jot2EtaUp",&jot2EtaUp);
     //the_input_tree->SetBranchAddress("jot2EtaDown",&jot2EtaDown);
     //the_input_tree->SetBranchAddress("jot1VBFID",&jot1VBFID);
-    the_input_tree->SetBranchAddress("scale",scale);
-    //the_input_tree->SetBranchAddress("sf_btag0",&sf_btag0);
-    //the_input_tree->SetBranchAddress("sf_btag1",&sf_btag1);
-    //the_input_tree->SetBranchAddress("sf_btag2",&sf_btag2);
-    //the_input_tree->SetBranchAddress("sf_btagGT0",&sf_btagGT0);
-    //the_input_tree->SetBranchAddress("sf_sjbtag0",&sf_sjbtag0);
-    //the_input_tree->SetBranchAddress("sf_sjbtag1",&sf_sjbtag1);
-    //the_input_tree->SetBranchAddress("sf_sjbtag2",&sf_sjbtag2);
-    //the_input_tree->SetBranchAddress("sf_sjbtagGT0",&sf_sjbtagGT0);
-    //the_input_tree->SetBranchAddress("sf_btag0BUp",&sf_btag0BUp);
-    //the_input_tree->SetBranchAddress("sf_btag1BUp",&sf_btag1BUp);
-    //the_input_tree->SetBranchAddress("sf_btag2BUp",&sf_btag2BUp);
-    //the_input_tree->SetBranchAddress("sf_btagGT0BUp",&sf_btagGT0BUp);
-    //the_input_tree->SetBranchAddress("sf_sjbtag0BUp",&sf_sjbtag0BUp);
-    //the_input_tree->SetBranchAddress("sf_sjbtag1BUp",&sf_sjbtag1BUp);
-    //the_input_tree->SetBranchAddress("sf_sjbtag2BUp",&sf_sjbtag2BUp);
-    //the_input_tree->SetBranchAddress("sf_sjbtagGT0BUp",&sf_sjbtagGT0BUp);
-    //the_input_tree->SetBranchAddress("sf_btag0BDown",&sf_btag0BDown);
-    //the_input_tree->SetBranchAddress("sf_btag1BDown",&sf_btag1BDown);
-    //the_input_tree->SetBranchAddress("sf_btag2BDown",&sf_btag2BDown);
-    //the_input_tree->SetBranchAddress("sf_btagGT0BDown",&sf_btagGT0BDown);
-    //the_input_tree->SetBranchAddress("sf_sjbtag0BDown",&sf_sjbtag0BDown);
-    //the_input_tree->SetBranchAddress("sf_sjbtag1BDown",&sf_sjbtag1BDown);
-    //the_input_tree->SetBranchAddress("sf_sjbtag2BDown",&sf_sjbtag2BDown);
-    //the_input_tree->SetBranchAddress("sf_sjbtagGT0BDown",&sf_sjbtagGT0BDown);
-    //the_input_tree->SetBranchAddress("sf_btag0MUp",&sf_btag0MUp);
-    //the_input_tree->SetBranchAddress("sf_btag1MUp",&sf_btag1MUp);
-    //the_input_tree->SetBranchAddress("sf_btag2MUp",&sf_btag2MUp);
-    //the_input_tree->SetBranchAddress("sf_btagGT0MUp",&sf_btagGT0MUp);
-    //the_input_tree->SetBranchAddress("sf_sjbtag0MUp",&sf_sjbtag0MUp);
-    //the_input_tree->SetBranchAddress("sf_sjbtag1MUp",&sf_sjbtag1MUp);
-    //the_input_tree->SetBranchAddress("sf_sjbtag2MUp",&sf_sjbtag2MUp);
-    //the_input_tree->SetBranchAddress("sf_sjbtagGT0MUp",&sf_sjbtagGT0MUp);
-    //the_input_tree->SetBranchAddress("sf_btag0MDown",&sf_btag0MDown);
-    //the_input_tree->SetBranchAddress("sf_btag1MDown",&sf_btag1MDown);
-    //the_input_tree->SetBranchAddress("sf_btag2MDown",&sf_btag2MDown);
-    //the_input_tree->SetBranchAddress("sf_btagGT0MDown",&sf_btagGT0MDown);
-    //the_input_tree->SetBranchAddress("sf_sjbtag0MDown",&sf_sjbtag0MDown);
-    //the_input_tree->SetBranchAddress("sf_sjbtag1MDown",&sf_sjbtag1MDown);
-    //the_input_tree->SetBranchAddress("sf_sjbtag2MDown",&sf_sjbtag2MDown);
-    //the_input_tree->SetBranchAddress("sf_sjbtagGT0MDown",&sf_sjbtagGT0MDown);
-    //the_input_tree->SetBranchAddress("sf_metTrigZmm",&sf_metTrigZmm);
-    //the_input_tree->SetBranchAddress("sf_qcdV_VBF",&sf_qcdV_VBF);
     the_input_tree->SetBranchAddress("jetNMBtags",&jetNMBtags);
     //the_input_tree->SetBranchAddress("pfmetRaw",&pfmetRaw);
     the_input_tree->SetBranchAddress("nB",&nB);
@@ -192,34 +184,11 @@ void whAnalysis(
     the_input_tree->SetBranchAddress("eventNumber",&eventNumber);
     the_input_tree->SetBranchAddress("npv",&npv);
     the_input_tree->SetBranchAddress("pu",&pu);
-    the_input_tree->SetBranchAddress("mcWeight",&mcWeight);
-    the_input_tree->SetBranchAddress("normalizedWeight",&normalizedWeight);
     //the_input_tree->SetBranchAddress("trigger",&trigger);
     //the_input_tree->SetBranchAddress("metFilter",&metFilter);
     //the_input_tree->SetBranchAddress("egmFilter",&egmFilter);
     //the_input_tree->SetBranchAddress("filter_maxRecoil",&filter_maxRecoil);
     //the_input_tree->SetBranchAddress("filter_whichRecoil",&filter_whichRecoil);
-    //the_input_tree->SetBranchAddress("sf_ewkV",&sf_ewkV);
-    //the_input_tree->SetBranchAddress("sf_qcdV",&sf_qcdV);
-    //the_input_tree->SetBranchAddress("sf_ewkV2j",&sf_ewkV2j);
-    //the_input_tree->SetBranchAddress("sf_qcdV2j",&sf_qcdV2j);
-    //the_input_tree->SetBranchAddress("sf_qcdTT",&sf_qcdTT);
-    //the_input_tree->SetBranchAddress("sf_lepID",&sf_lepID);
-    //the_input_tree->SetBranchAddress("sf_lepIso",&sf_lepIso);
-    //the_input_tree->SetBranchAddress("sf_lepTrack",&sf_lepTrack);
-    //the_input_tree->SetBranchAddress("sf_pho",&sf_pho);
-    //the_input_tree->SetBranchAddress("sf_eleTrig",&sf_eleTrig);
-    //the_input_tree->SetBranchAddress("sf_phoTrig",&sf_phoTrig);
-    //the_input_tree->SetBranchAddress("sf_metTrig",&sf_metTrig);
-    //the_input_tree->SetBranchAddress("sf_pu",&sf_pu);
-    //the_input_tree->SetBranchAddress("sf_npv",&sf_npv);
-    //the_input_tree->SetBranchAddress("sf_tt",&sf_tt);
-    //the_input_tree->SetBranchAddress("sf_tt_ext",&sf_tt_ext);
-    //the_input_tree->SetBranchAddress("sf_tt_bound",&sf_tt_bound);
-    //the_input_tree->SetBranchAddress("sf_tt8TeV",&sf_tt8TeV);
-    //the_input_tree->SetBranchAddress("sf_tt8TeV_ext",&sf_tt8TeV_ext);
-    //the_input_tree->SetBranchAddress("sf_tt8TeV_bound",&sf_tt8TeV_bound);
-    //the_input_tree->SetBranchAddress("sf_phoPurity",&sf_phoPurity);
     the_input_tree->SetBranchAddress("pfmet",&pfmet);
     the_input_tree->SetBranchAddress("pfmetphi",&pfmetphi);
     //the_input_tree->SetBranchAddress("pfmetnomu",&pfmetnomu);
@@ -227,7 +196,7 @@ void whAnalysis(
     //the_input_tree->SetBranchAddress("puppimetphi",&puppimetphi);
     the_input_tree->SetBranchAddress("calomet",&calomet);
     the_input_tree->SetBranchAddress("calometphi",&calometphi);
-    //the_input_tree->SetBranchAddress("pfcalobalance",&pfcalobalance);
+    the_input_tree->SetBranchAddress("pfcalobalance",&pfcalobalance);
     //the_input_tree->SetBranchAddress("sumET",&sumET);
     //the_input_tree->SetBranchAddress("trkmet",&trkmet);
     //the_input_tree->SetBranchAddress("puppiUWmag",&puppiUWmag);
@@ -297,26 +266,26 @@ void whAnalysis(
     //the_input_tree->SetBranchAddress("isojet2Pt",&isojet2Pt);
     //the_input_tree->SetBranchAddress("isojet2CSV",&isojet2CSV);
     //the_input_tree->SetBranchAddress("isojet2Flav",&isojet2Flav);
-    //the_input_tree->SetBranchAddress("jetNBtags",&jetNBtags);
+    the_input_tree->SetBranchAddress("jetNBtags",&jetNBtags);
     //the_input_tree->SetBranchAddress("isojetNBtags",&isojetNBtags);
     //the_input_tree->SetBranchAddress("nFatjet",&nFatjet);
-    the_input_tree->SetBranchAddress("nHF",&nHF);
+    //the_input_tree->SetBranchAddress("nHF",&nHF);
     //the_input_tree->SetBranchAddress("nLoosePhoton",&nLoosePhoton);
     //the_input_tree->SetBranchAddress("nTightPhoton",&nTightPhoton);
-    the_input_tree->SetBranchAddress("loosePho1IsTight",&loosePho1IsTight);
-    the_input_tree->SetBranchAddress("loosePho1Pt",&loosePho1Pt);
-    the_input_tree->SetBranchAddress("loosePho1Eta",&loosePho1Eta);
-    the_input_tree->SetBranchAddress("loosePho1Phi",&loosePho1Phi);
+    //the_input_tree->SetBranchAddress("loosePho1IsTight",&loosePho1IsTight);
+    //the_input_tree->SetBranchAddress("loosePho1Pt",&loosePho1Pt);
+    //the_input_tree->SetBranchAddress("loosePho1Eta",&loosePho1Eta);
+    //the_input_tree->SetBranchAddress("loosePho1Phi",&loosePho1Phi);
     the_input_tree->SetBranchAddress("nLooseLep",&nLooseLep);
     the_input_tree->SetBranchAddress("nLooseElectron",&nLooseElectron);
     the_input_tree->SetBranchAddress("nLooseMuon",&nLooseMuon);
-    the_input_tree->SetBranchAddress("nTightLep",&nTightLep);
-    the_input_tree->SetBranchAddress("nTightElectron",&nTightElectron);
-    the_input_tree->SetBranchAddress("nTightMuon",&nTightMuon);
+    //the_input_tree->SetBranchAddress("nTightLep",&nTightLep);
+    //the_input_tree->SetBranchAddress("nTightElectron",&nTightElectron);
+    //the_input_tree->SetBranchAddress("nTightMuon",&nTightMuon);
     the_input_tree->SetBranchAddress("looseLep1PdgId",&looseLep1PdgId);
-    the_input_tree->SetBranchAddress("looseLep2PdgId",&looseLep2PdgId);
+    //the_input_tree->SetBranchAddress("looseLep2PdgId",&looseLep2PdgId);
     the_input_tree->SetBranchAddress("looseLep1IsTight",&looseLep1IsTight);
-    the_input_tree->SetBranchAddress("looseLep2IsTight",&looseLep2IsTight);
+    //the_input_tree->SetBranchAddress("looseLep2IsTight",&looseLep2IsTight);
     the_input_tree->SetBranchAddress("looseLep1Pt",&looseLep1Pt);
     the_input_tree->SetBranchAddress("looseLep1Eta",&looseLep1Eta);
     the_input_tree->SetBranchAddress("looseLep1Phi",&looseLep1Phi);
@@ -326,55 +295,156 @@ void whAnalysis(
     //the_input_tree->SetBranchAddress("diLepMass",&diLepMass);
     //the_input_tree->SetBranchAddress("nTau",&nTau);
     the_input_tree->SetBranchAddress("mT",&mT);
-    the_input_tree->SetBranchAddress("scaleUp",&scaleUp);
-    the_input_tree->SetBranchAddress("scaleDown",&scaleDown);
-    the_input_tree->SetBranchAddress("pdfUp",&pdfUp);
-    the_input_tree->SetBranchAddress("pdfDown",&pdfDown);
-
-    //     This is the loop skeleton
-    //       To read only selected branches, Insert statements like:
-    // events->SetBranchStatus("*",0);  // disable all branches
-    // TTreePlayer->SetBranchStatus("branchname",1);  // activate branchname
+    if(infileCat_[ifile] != 0) {
+      the_input_tree->SetBranchAddress("mcWeight",&mcWeight);
+      the_input_tree->SetBranchAddress("normalizedWeight",&normalizedWeight);
+      //the_input_tree->SetBranchAddress("sf_ewkV",&sf_ewkV);
+      //the_input_tree->SetBranchAddress("sf_qcdV",&sf_qcdV);
+      //the_input_tree->SetBranchAddress("sf_ewkV2j",&sf_ewkV2j);
+      //the_input_tree->SetBranchAddress("sf_qcdV2j",&sf_qcdV2j);
+      //the_input_tree->SetBranchAddress("sf_qcdTT",&sf_qcdTT);
+      the_input_tree->SetBranchAddress("sf_lepID",&sf_lepID);
+      the_input_tree->SetBranchAddress("sf_lepIso",&sf_lepIso);
+      the_input_tree->SetBranchAddress("sf_lepTrack",&sf_lepTrack);
+      //the_input_tree->SetBranchAddress("sf_pho",&sf_pho);
+      //the_input_tree->SetBranchAddress("sf_eleTrig",&sf_eleTrig);
+      //the_input_tree->SetBranchAddress("sf_phoTrig",&sf_phoTrig);
+      //the_input_tree->SetBranchAddress("sf_metTrig",&sf_metTrig);
+      the_input_tree->SetBranchAddress("sf_pu",&sf_pu);
+      the_input_tree->SetBranchAddress("sf_npv",&sf_npv);
+      //the_input_tree->SetBranchAddress("sf_tt",&sf_tt);
+      //the_input_tree->SetBranchAddress("sf_tt_ext",&sf_tt_ext);
+      //the_input_tree->SetBranchAddress("sf_tt_bound",&sf_tt_bound);
+      //the_input_tree->SetBranchAddress("sf_tt8TeV",&sf_tt8TeV);
+      //the_input_tree->SetBranchAddress("sf_tt8TeV_ext",&sf_tt8TeV_ext);
+      //the_input_tree->SetBranchAddress("sf_tt8TeV_bound",&sf_tt8TeV_bound);
+      //the_input_tree->SetBranchAddress("sf_phoPurity",&sf_phoPurity);
+      the_input_tree->SetBranchAddress("scale",scale);
+      //the_input_tree->SetBranchAddress("sf_btag0",&sf_btag0);
+      //the_input_tree->SetBranchAddress("sf_btag1",&sf_btag1);
+      //the_input_tree->SetBranchAddress("sf_btag2",&sf_btag2);
+      //the_input_tree->SetBranchAddress("sf_btagGT0",&sf_btagGT0);
+      //the_input_tree->SetBranchAddress("sf_sjbtag0",&sf_sjbtag0);
+      //the_input_tree->SetBranchAddress("sf_sjbtag1",&sf_sjbtag1);
+      //the_input_tree->SetBranchAddress("sf_sjbtag2",&sf_sjbtag2);
+      //the_input_tree->SetBranchAddress("sf_sjbtagGT0",&sf_sjbtagGT0);
+      //the_input_tree->SetBranchAddress("sf_btag0BUp",&sf_btag0BUp);
+      //the_input_tree->SetBranchAddress("sf_btag1BUp",&sf_btag1BUp);
+      //the_input_tree->SetBranchAddress("sf_btag2BUp",&sf_btag2BUp);
+      //the_input_tree->SetBranchAddress("sf_btagGT0BUp",&sf_btagGT0BUp);
+      //the_input_tree->SetBranchAddress("sf_sjbtag0BUp",&sf_sjbtag0BUp);
+      //the_input_tree->SetBranchAddress("sf_sjbtag1BUp",&sf_sjbtag1BUp);
+      //the_input_tree->SetBranchAddress("sf_sjbtag2BUp",&sf_sjbtag2BUp);
+      //the_input_tree->SetBranchAddress("sf_sjbtagGT0BUp",&sf_sjbtagGT0BUp);
+      //the_input_tree->SetBranchAddress("sf_btag0BDown",&sf_btag0BDown);
+      //the_input_tree->SetBranchAddress("sf_btag1BDown",&sf_btag1BDown);
+      //the_input_tree->SetBranchAddress("sf_btag2BDown",&sf_btag2BDown);
+      //the_input_tree->SetBranchAddress("sf_btagGT0BDown",&sf_btagGT0BDown);
+      //the_input_tree->SetBranchAddress("sf_sjbtag0BDown",&sf_sjbtag0BDown);
+      //the_input_tree->SetBranchAddress("sf_sjbtag1BDown",&sf_sjbtag1BDown);
+      //the_input_tree->SetBranchAddress("sf_sjbtag2BDown",&sf_sjbtag2BDown);
+      //the_input_tree->SetBranchAddress("sf_sjbtagGT0BDown",&sf_sjbtagGT0BDown);
+      //the_input_tree->SetBranchAddress("sf_btag0MUp",&sf_btag0MUp);
+      //the_input_tree->SetBranchAddress("sf_btag1MUp",&sf_btag1MUp);
+      //the_input_tree->SetBranchAddress("sf_btag2MUp",&sf_btag2MUp);
+      //the_input_tree->SetBranchAddress("sf_btagGT0MUp",&sf_btagGT0MUp);
+      //the_input_tree->SetBranchAddress("sf_sjbtag0MUp",&sf_sjbtag0MUp);
+      //the_input_tree->SetBranchAddress("sf_sjbtag1MUp",&sf_sjbtag1MUp);
+      //the_input_tree->SetBranchAddress("sf_sjbtag2MUp",&sf_sjbtag2MUp);
+      //the_input_tree->SetBranchAddress("sf_sjbtagGT0MUp",&sf_sjbtagGT0MUp);
+      //the_input_tree->SetBranchAddress("sf_btag0MDown",&sf_btag0MDown);
+      //the_input_tree->SetBranchAddress("sf_btag1MDown",&sf_btag1MDown);
+      //the_input_tree->SetBranchAddress("sf_btag2MDown",&sf_btag2MDown);
+      //the_input_tree->SetBranchAddress("sf_btagGT0MDown",&sf_btagGT0MDown);
+      //the_input_tree->SetBranchAddress("sf_sjbtag0MDown",&sf_sjbtag0MDown);
+      //the_input_tree->SetBranchAddress("sf_sjbtag1MDown",&sf_sjbtag1MDown);
+      //the_input_tree->SetBranchAddress("sf_sjbtag2MDown",&sf_sjbtag2MDown);
+      //the_input_tree->SetBranchAddress("sf_sjbtagGT0MDown",&sf_sjbtagGT0MDown);
+      //the_input_tree->SetBranchAddress("sf_metTrigZmm",&sf_metTrigZmm);
+      //the_input_tree->SetBranchAddress("sf_qcdV_VBF",&sf_qcdV_VBF);
+      the_input_tree->SetBranchAddress("scaleUp",&scaleUp);
+      the_input_tree->SetBranchAddress("scaleDown",&scaleDown);
+      the_input_tree->SetBranchAddress("pdfUp",&pdfUp);
+      the_input_tree->SetBranchAddress("pdfDown",&pdfDown);
+    }
 
     Long64_t nentries = the_input_tree->GetEntries();
 
     Long64_t nbytes = 0;
     double theMCPrescale = mcPrescale;
     if(infileCat_[ifile] == 0) theMCPrescale = 1.0;
+    // Loop over events in the file
     for (int i=0; i<int(nentries/theMCPrescale); ++i) {
       if(i%100000==0 || i+1==int(nentries/theMCPrescale) ) printf("event %d out of %d\n",i+1,int(nentries/theMCPrescale));
       the_input_tree->GetEntry(i);
-      bool passPresel=false;
-      int flavor=-1;
-      double ptFrac = looseLep1Pt/pfmet;
-      
       if(nLooseLep<1) continue;
-      if     (nTightElectron ==1) flavor=0;
-      else if(nTightMuon     ==1) flavor=1;
-      TVector2 vLep1, vPFMET; 
-      vLep1.SetMagPhi(looseLep1Pt, looseLep1Phi);
-      vPFMET.SetMagPhi(pfmet, pfmetphi);
-      double deltaPhiLepMET = vLep1.DeltaPhi(vPFMET);
       
-      unsigned int nNiceJets=0;
-      if(jet1Pt > 30) nNiceJets++;
-      if(jet2Pt > 30) nNiceJets++;
-
-      if(
-        nLooseLep==1 && looseLep1IsTight && (flavor>=0) &&
-        looseLep1Pt>50 &&
-        pfmet>100 &&
-        ptFrac > 0.4 && ptFrac < 1.5 &&
-        TMath::Abs(deltaPhiLepMET) > 2 &&
-        jet1CSV<0.5426 && jet2CSV<0.5426
-      ) passPresel=true;
+      bool passPreSel=false, passSigSel=false;
+      
+      // Analysis calculations
+      int flavor=-1; {
+        unsigned int absPdgId = TMath::Abs(looseLep1PdgId);
+        if     (absPdgId==11) flavor=0;
+        else if(absPdgId==13) flavor=1;
+      }
+      double ptFrac = looseLep1Pt/pfmet;
+      double deltaPhiLepMET; {
+        TVector2 vLep1, vPFMET;
+        vLep1.SetMagPhi(looseLep1Pt, looseLep1Phi);
+        vPFMET.SetMagPhi(pfmet, pfmetphi);
+        deltaPhiLepMET = TMath::Abs(vLep1.DeltaPhi(vPFMET));
+      }
+      
+      // Analysis booleans
+      bool pass1LepSel    = (nLooseLep==1 && looseLep1IsTight && (flavor>=0));
+      bool passNjets      = (unsigned(nJet) < (jet_categories-1));
+      bool passLepPt      = (looseLep1Pt>=50);
+      bool passMT         = (mT>=50);
+      bool passMet        = (pfmet>=50);
+      bool passMetTight   = (pfmet>=100);
+      bool passPtFrac     = (ptFrac > 0.4 && ptFrac < 1.5);
+      bool passDPhiLepMet = (deltaPhiLepMET > 2);
+      bool passBveto      = jetNBtags==0 && jet1CSV<0.5426 && jet2CSV<0.5426;
+      
+      // Selection booleans
+      std::map<TString, bool> passAllCuts, passNMinusOne;
+      passAllCuts["presel"] = pass1LepSel && passNjets && passLepPt && passMT && passMet && !passMetTight                                             ;
+      passAllCuts["sigsel"] = pass1LepSel && passNjets && passLepPt && passMT && passMet                  && passPtFrac && passDPhiLepMet && passBveto;
       
       //begin event weighting
-      double totalWeight = normalizedWeight * 1000. * lumi * theMCPrescale;
-      if(passPresel && nNiceJets < (jet_categories-1) ) histo_mT_presel[nNiceJets][infileCat_[ifile]][flavor]->Fill(mT, mcWeight);
-      if(passPresel) {
-        histo_mT_presel[jet_categories-1][infileCat_[ifile]][flavor]->Fill(mT, totalWeight);
-        histo_mT_presel[jet_categories-1][infileCat_[ifile]][2]     ->Fill(mT, totalWeight);
+      double totalWeight = 1;
+      if(infileCat_[ifile] != 0) {
+        totalWeight *= normalizedWeight;
+        totalWeight *= 1000. * lumi;
+        totalWeight *= theMCPrescale;
+        totalWeight *= sf_pu * sf_npv;
+        totalWeight *= sf_lepID * sf_lepIso * sf_lepTrack;
+      }
+      if(passAllCuts["presel"]) {
+        // fill preselection plots
+        histo_mT_presel  [nJet            ][infileCat_[ifile]][flavor]->Fill(mT          , totalWeight);
+        histo_mT_presel  [nJet            ][infileCat_[ifile]][2     ]->Fill(mT          , totalWeight);
+        histo_mT_presel  [jet_categories-1][infileCat_[ifile]][flavor]->Fill(mT          , totalWeight);
+        histo_mT_presel  [jet_categories-1][infileCat_[ifile]][2     ]->Fill(mT          , totalWeight);
+        histo_npv_presel [nJet            ][infileCat_[ifile]][flavor]->Fill(npv         , totalWeight);
+        histo_npv_presel [nJet            ][infileCat_[ifile]][2     ]->Fill(npv         , totalWeight);
+        histo_npv_presel [jet_categories-1][infileCat_[ifile]][flavor]->Fill(npv         , totalWeight);
+        histo_npv_presel [jet_categories-1][infileCat_[ifile]][2     ]->Fill(npv         , totalWeight);
+        histo_ptl1_presel[nJet            ][infileCat_[ifile]][flavor]->Fill(looseLep1Pt , totalWeight);
+        histo_ptl1_presel[nJet            ][infileCat_[ifile]][2     ]->Fill(looseLep1Pt , totalWeight);
+        histo_ptl1_presel[jet_categories-1][infileCat_[ifile]][flavor]->Fill(looseLep1Pt , totalWeight);
+        histo_ptl1_presel[jet_categories-1][infileCat_[ifile]][2     ]->Fill(looseLep1Pt , totalWeight);
+      }
+      if(passAllCuts["sigsel"]) {
+        // fill sig. selection plots
+        histo_mT_sigsel  [nJet            ][infileCat_[ifile]][flavor]->Fill(mT          , totalWeight);
+        histo_mT_sigsel  [nJet            ][infileCat_[ifile]][2     ]->Fill(mT          , totalWeight);
+        histo_mT_sigsel  [jet_categories-1][infileCat_[ifile]][flavor]->Fill(mT          , totalWeight);
+        histo_mT_sigsel  [jet_categories-1][infileCat_[ifile]][2     ]->Fill(mT          , totalWeight);
+        histo_ptl1_sigsel[nJet            ][infileCat_[ifile]][flavor]->Fill(looseLep1Pt , totalWeight);
+        histo_ptl1_sigsel[nJet            ][infileCat_[ifile]][2     ]->Fill(looseLep1Pt , totalWeight);
+        histo_ptl1_sigsel[jet_categories-1][infileCat_[ifile]][flavor]->Fill(looseLep1Pt , totalWeight);
+        histo_ptl1_sigsel[jet_categories-1][infileCat_[ifile]][2     ]->Fill(looseLep1Pt , totalWeight);
       }
 
     }
@@ -382,8 +452,12 @@ void whAnalysis(
   }
   output_plots->cd();
   for(unsigned int i_jet=0; i_jet<jet_categories; i_jet++) { for(unsigned int i_type=0; i_type<process_types; i_type++) { for(unsigned int i_flav=0; i_flav<3; i_flav++) {
-      if(i_flav<2) continue;
-      histo_mT_presel[i_jet][i_type][i_flav] -> Write();
+      if(i_flav<2) continue; // don't write individual electron/muon channel for right now
+      histo_mT_presel  [i_jet][i_type][i_flav] -> Write();
+      histo_npv_presel [i_jet][i_type][i_flav] -> Write();
+      histo_ptl1_presel[i_jet][i_type][i_flav] -> Write();
+      histo_mT_sigsel  [i_jet][i_type][i_flav] -> Write();
+      histo_ptl1_sigsel[i_jet][i_type][i_flav] -> Write();
   }}}
   output_plots->Close();
 

@@ -7,6 +7,7 @@
 #include <TH2D.h>
 #include <TMath.h>
 #include <TVector2.h>
+#include <TDirectory.h>
 #include <iostream>
 #include <fstream>
 
@@ -20,12 +21,12 @@ void whAnalysis(
  string subdirectory=""
 ) {
   // Hardcoded settings
-  double mcPrescale = 1; 
+  double mcPrescale = 1000; 
   Double_t lumi = 35.9;
-  const unsigned int jet_categories=4; // 0-jet, 1-jet, 2-jet, and inclusive
-  const unsigned int process_types=8; 
-  TString filesPathDA   = "/data/t3home000/dhsu/panda/v_004_0/";
-  TString filesPathMC   = "/data/t3home000/dhsu/panda/v_004_0/";
+  const unsigned int jet_cats=4; // 0-jet, 1-jet, 2-jet, and inclusive
+  const unsigned int process_types=10; 
+  TString filesPathDA   = "/data/t3home000/dhsu/panda/merged_skims/";
+  TString filesPathMC   = "/data/t3home000/dhsu/panda/merged_skims/";
   
   // Set up output dirs
   if(subdirectory!="" && subdirectory.c_str()[0]!='/') subdirectory = "/"+subdirectory;
@@ -38,26 +39,40 @@ void whAnalysis(
   vector<TString> infileName_, signalName_, categoryName_, jetString_, lepString_;
   vector<Int_t> infileCat_, signalIndex_;  
 
-  
   // Data files
-  infileName_.push_back(Form("%sSingleElectron.root"  ,  filesPathDA.Data()));  infileCat_.push_back(0);
-  infileName_.push_back(Form("%sSingleMuon.root"      ,  filesPathDA.Data()));  infileCat_.push_back(0);
+  //infileName_.push_back(Form("%sSingleElectron.root"  ,  filesPathDA.Data()));  infileCat_.push_back(0);
+  //infileName_.push_back(Form("%sSingleMuon.root"      ,  filesPathDA.Data()));  infileCat_.push_back(0);
   
   // MC files
-  infileName_.push_back(Form("%sTTbar_Powheg.root"    ,  filesPathMC.Data()));  infileCat_.push_back(1);
-  infileName_.push_back(Form("%sSingleTop_tG.root"    ,  filesPathMC.Data()));  infileCat_.push_back(1);
-  infileName_.push_back(Form("%sSingleTop_tT.root"    ,  filesPathMC.Data()));  infileCat_.push_back(1);
-  infileName_.push_back(Form("%sSingleTop_tTbar.root" ,  filesPathMC.Data()));  infileCat_.push_back(1);
-  infileName_.push_back(Form("%sSingleTop_tW.root"    ,  filesPathMC.Data()));  infileCat_.push_back(1);
-  infileName_.push_back(Form("%sSingleTop_tbarW.root" ,  filesPathMC.Data()));  infileCat_.push_back(1);
-  
-  infileName_.push_back(Form("%sWJets_EWKWPlus.root"  ,  filesPathMC.Data()));  infileCat_.push_back(2);
-  infileName_.push_back(Form("%sWJets_EWKWMinus.root" ,  filesPathMC.Data()));  infileCat_.push_back(2);
-  infileName_.push_back(Form("%sWJets_nlo.root"       ,  filesPathMC.Data()));  infileCat_.push_back(3);
-  infileName_.push_back(Form("%sZJets_nlo.root"       ,  filesPathMC.Data()));  infileCat_.push_back(4);
-  infileName_.push_back(Form("%sDiboson_wz.root"      ,  filesPathMC.Data()));  infileCat_.push_back(5);
-  infileName_.push_back(Form("%sDiboson_zz.root"      ,  filesPathMC.Data()));  infileCat_.push_back(6);
-  infileName_.push_back(Form("%sDiboson_ww.root"      ,  filesPathMC.Data()));  infileCat_.push_back(7);
+    // Top backgrounds
+    infileName_.push_back(Form("%sTTbar_Powheg.root"    ,  filesPathMC.Data()));  infileCat_.push_back(1);
+    infileName_.push_back(Form("%sSingleTop_tG.root"    ,  filesPathMC.Data()));  infileCat_.push_back(1);
+    infileName_.push_back(Form("%sSingleTop_tT.root"    ,  filesPathMC.Data()));  infileCat_.push_back(1);
+    infileName_.push_back(Form("%sSingleTop_tTbar.root" ,  filesPathMC.Data()));  infileCat_.push_back(1);
+    infileName_.push_back(Form("%sSingleTop_tW.root"    ,  filesPathMC.Data()));  infileCat_.push_back(1);
+    infileName_.push_back(Form("%sSingleTop_tbarW.root" ,  filesPathMC.Data()));  infileCat_.push_back(1);
+    // Single boson production
+    infileName_.push_back(Form("%sWJets_EWKWPlus.root"      , filesPathMC.Data()));  infileCat_.push_back(2);
+    infileName_.push_back(Form("%sWJets_EWKWMinus.root"     , filesPathMC.Data()));  infileCat_.push_back(2);
+    infileName_.push_back(Form("%sWJets_nlo.root"           , filesPathMC.Data()));  infileCat_.push_back(3);
+    infileName_.push_back(Form("%sZJets_nlo.root"           , filesPathMC.Data()));  infileCat_.push_back(4);
+    infileName_.push_back(Form("%sZJets_EWK.root"           , filesPathMC.Data()));  infileCat_.push_back(4);
+    infileName_.push_back(Form("%sZtoNuNu_EWK.root"         , filesPathMC.Data()));  infileCat_.push_back(4);
+    infileName_.push_back(Form("%sZtoNuNu_Zpt50to100.root"  , filesPathMC.Data()));  infileCat_.push_back(4);
+    infileName_.push_back(Form("%sZtoNuNu_Zpt100to250.root" , filesPathMC.Data()));  infileCat_.push_back(4);
+    infileName_.push_back(Form("%sZtoNuNu_Zpt250to400.root" , filesPathMC.Data()));  infileCat_.push_back(4);
+    infileName_.push_back(Form("%sZtoNuNu_Zpt400to650.root" , filesPathMC.Data()));  infileCat_.push_back(4);
+    infileName_.push_back(Form("%sZtoNuNu_Zpt650toinf.root" , filesPathMC.Data()));  infileCat_.push_back(4);
+    // Diboson production
+    infileName_.push_back(Form("%sDiboson_wz.root"      ,  filesPathMC.Data()));  infileCat_.push_back(5);
+    infileName_.push_back(Form("%sDiboson_zz.root"      ,  filesPathMC.Data()));  infileCat_.push_back(6);
+    infileName_.push_back(Form("%sDiboson_ww.root"      ,  filesPathMC.Data()));  infileCat_.push_back(7);
+    // Random crap samples
+    infileName_.push_back(Form("%sQCD.root"             ,  filesPathMC.Data()));  infileCat_.push_back(8);
+    infileName_.push_back(Form("%sGJets.root"           ,  filesPathMC.Data()));  infileCat_.push_back(8);
+    // Signal samples
+    infileName_.push_back(Form("%sWminusH_HToInvisible_WToLNu_M125_13TeV_powheg_pythia8.root"           ,  filesPathMC.Data()));  infileCat_.push_back(9);
+    infileName_.push_back(Form("%sWplusH_HToInvisible_WToLNu_M125_13TeV_powheg_pythia8.root"            ,  filesPathMC.Data()));  infileCat_.push_back(9);
 
   // Process types
   categoryName_.push_back("Data");
@@ -68,6 +83,8 @@ void whAnalysis(
   categoryName_.push_back("WZ");
   categoryName_.push_back("ZZ");
   categoryName_.push_back("WW");
+  categoryName_.push_back("QCD/y+jets");
+  categoryName_.push_back("WH(125)");
 
   jetString_.push_back("0j");
   jetString_.push_back("1j");
@@ -86,19 +103,43 @@ void whAnalysis(
   //*******************************************************
   // Set up histograms
   //*******************************************************
-  // This part really sucks right now
-  // Need to do something more Guillelmo style  :-)
-  char output[200];
-  sprintf(output,"MitWHAnalysis/plots%s/histo_wh_nice.root",subdirectory.c_str());
-  TFile *output_plots = new TFile(output,"RECREATE");
+  const int allPlots=15;
+  TH1D *histo[allPlots][process_types][jet_cats][3];
+  TString plotName;
+  vector<TString> plotName_;
+  for(int thePlot=0; thePlot<allPlots; thePlot++){
+    if     (thePlot ==  0) {nBinPlot = 200; xminPlot = 0.0; xmaxPlot =1000.0;       plotName_.push_back("presel lep pT"         );}
+    else if(thePlot ==  1) {nBinPlot = 200; xminPlot = 0.0; xmaxPlot =1000.0;       plotName_.push_back("presel mT"             );}
+    else if(thePlot ==  2) {nBinPlot = 200; xminPlot = 0.0; xmaxPlot =1000.0;       plotName_.push_back("presel MET"            );}
+    else if(thePlot ==  3) {nBinPlot = 200; xminPlot = 0.0; xmaxPlot = TMath::Pi(); plotName_.push_back("presel lep eta"        );}
+    else if(thePlot ==  4) {nBinPlot = 200; xminPlot = 0.0; xmaxPlot =1000.0;       plotName_.push_back("presel leading jet pT" );}
+    else if(thePlot ==  5) {nBinPlot = 100; xminPlot = 0.0; xmaxPlot =   1.0;       plotName_.push_back("presel max CSV2"       );}
+    else if(thePlot ==  6) {nBinPlot = 200; xminPlot = 0.0; xmaxPlot =   4.0;       plotName_.push_back("presel pf calo balance");}
+    else if(thePlot ==  7) {nBinPlot = 200; xminPlot = 0.0; xmaxPlot =1000.0;       plotName_.push_back("sigsel lep pT"         );}
+    else if(thePlot ==  8) {nBinPlot = 200; xminPlot = 0.0; xmaxPlot =1000.0;       plotName_.push_back("sigsel mT"             );}
+    else if(thePlot ==  9) {nBinPlot = 200; xminPlot = 0.0; xmaxPlot = TMath::Pi(); plotName_.push_back("sigsel lep eta"        );}
+    else if(thePlot == 10) {nBinPlot = 200; xminPlot = 0.0; xmaxPlot =1000.0;       plotName_.push_back("sigsel leading jet pT" );}
+    else if(thePlot == 11) {nBinPlot = 200; xminPlot = 0.0; xmaxPlot =   4.0;       plotName_.push_back("sigsel pf calo balance");}
+    else if(thePlot == 12) {nBinPlot = 200; xminPlot = 0.0; xmaxPlot =   4.0;       plotName_.push_back("N-1 lepton MET balance");}
+    else if(thePlot == 13) {nBinPlot = 200; xminPlot = 0.0; xmaxPlot =   4.0;       plotName_.push_back("N-1 max CSV2"          );}
+    else if(thePlot == 14) {nBinPlot = 200; xminPlot = 0.0; xmaxPlot =1000.0;       plotName_.push_back("N-1 MET"               );}
+    TH1D* histos;
+    histos = new TH1D("histos", "histos", nBinPlot, xminPlot, xmaxPlot);
+    histos->Sumw2();
+    for(unsigned int i_jet=0; i_jet<jet_cats; i_jet++) { for(unsigned int i_type=0; i_type<process_types; i_type++) { for(unsigned int i_flav=0; i_flav<3; i_flav++) {
+      histo[thePlot][i_type][i_jet][i_flav] = (TH1D*) histos->Clone(Form("%s %s (%s,%s)",plotName.Data(), categoryName_[i_type].Data(), jetString_[i_jet].Data(), lepString_[i_flav].Data()));
+    }}}
+    histos->Reset();histos->Clear();
+  }
+
   // declare preselection plots
-  TH1D *histo_mT_presel[jet_categories][process_types][3];
-  TH1D *histo_npv_presel[jet_categories][process_types][3];
-  TH1D *histo_ptl1_presel[jet_categories][process_types][3];
+  TH1D *histo_mT_presel[jet_cats][process_types][3];
+  TH1D *histo_npv_presel[jet_cats][process_types][3];
+  TH1D *histo_ptl1_presel[jet_cats][process_types][3];
   // declare signal selection plots
-  TH1D *histo_mT_sigsel[jet_categories][process_types][3];
-  TH1D *histo_ptl1_sigsel[jet_categories][process_types][3];
-  for(unsigned int i_jet=0; i_jet<jet_categories; i_jet++) { for(unsigned int i_type=0; i_type<process_types; i_type++) { for(unsigned int i_flav=0; i_flav<3; i_flav++) {
+  TH1D *histo_mT_sigsel[jet_cats][process_types][3];
+  TH1D *histo_ptl1_sigsel[jet_cats][process_types][3];
+  for(unsigned int i_jet=0; i_jet<jet_cats; i_jet++) { for(unsigned int i_type=0; i_type<process_types; i_type++) { for(unsigned int i_flav=0; i_flav<3; i_flav++) {
       // instantiate preselection plots
       histo_mT_presel[i_jet][i_type][i_flav] = new TH1D(
         Form("histo_mT_presel_%s_%s_%d", jetString_[i_jet].Data(), lepString_[i_flav].Data(), i_type),
@@ -133,21 +174,21 @@ void whAnalysis(
 
     TFile *the_input_file = TFile::Open(infileName_[ifile].Data());
     TTree *the_input_tree = (TTree*)the_input_file->FindObjectAny("events");
-   
+    unsigned int theCategory = infileCat_[ifile];
     // Set branch addresses.
     the_input_tree->SetBranchAddress("nJet",&nJet);
-    //the_input_tree->SetBranchAddress("nJot",&nJot);
-    //the_input_tree->SetBranchAddress("jot1Phi",&jot1Phi);
-    //the_input_tree->SetBranchAddress("jot1Pt",&jot1Pt);
-    //the_input_tree->SetBranchAddress("jot1GenPt",&jot1GenPt);
-    //the_input_tree->SetBranchAddress("jot1Eta",&jot1Eta);
-    //the_input_tree->SetBranchAddress("jot2Phi",&jot2Phi);
-    //the_input_tree->SetBranchAddress("jot2Pt",&jot2Pt);
-    //the_input_tree->SetBranchAddress("jot2GenPt",&jot2GenPt);
-    //the_input_tree->SetBranchAddress("jot2Eta",&jot2Eta);
-    //the_input_tree->SetBranchAddress("jot12DPhi",&jot12DPhi);
-    //the_input_tree->SetBranchAddress("jot12Mass",&jot12Mass);
-    //the_input_tree->SetBranchAddress("jot12DEta",&jot12DEta);
+    the_input_tree->SetBranchAddress("nJot",&nJot);
+    the_input_tree->SetBranchAddress("jot1Phi",&jot1Phi);
+    the_input_tree->SetBranchAddress("jot1Pt",&jot1Pt);
+    the_input_tree->SetBranchAddress("jot1GenPt",&jot1GenPt);
+    the_input_tree->SetBranchAddress("jot1Eta",&jot1Eta);
+    the_input_tree->SetBranchAddress("jot2Phi",&jot2Phi);
+    the_input_tree->SetBranchAddress("jot2Pt",&jot2Pt);
+    the_input_tree->SetBranchAddress("jot2GenPt",&jot2GenPt);
+    the_input_tree->SetBranchAddress("jot2Eta",&jot2Eta);
+    the_input_tree->SetBranchAddress("jot12DPhi",&jot12DPhi);
+    the_input_tree->SetBranchAddress("jot12Mass",&jot12Mass);
+    the_input_tree->SetBranchAddress("jot12DEta",&jot12DEta);
     the_input_tree->SetBranchAddress("pfmetUp",&pfmetUp);
     the_input_tree->SetBranchAddress("pfmetDown",&pfmetDown);
     //the_input_tree->SetBranchAddress("pfUWmagUp",&pfUWmagUp);
@@ -295,7 +336,7 @@ void whAnalysis(
     //the_input_tree->SetBranchAddress("diLepMass",&diLepMass);
     //the_input_tree->SetBranchAddress("nTau",&nTau);
     the_input_tree->SetBranchAddress("mT",&mT);
-    if(infileCat_[ifile] != 0) {
+    if(theCategory != 0) {
       the_input_tree->SetBranchAddress("mcWeight",&mcWeight);
       the_input_tree->SetBranchAddress("normalizedWeight",&normalizedWeight);
       //the_input_tree->SetBranchAddress("sf_ewkV",&sf_ewkV);
@@ -372,7 +413,7 @@ void whAnalysis(
 
     Long64_t nbytes = 0;
     double theMCPrescale = mcPrescale;
-    if(infileCat_[ifile] == 0) theMCPrescale = 1.0;
+    if(theCategory == 0) theMCPrescale = 1.0;
     // Loop over events in the file
     for (int i=0; i<int(nentries/theMCPrescale); ++i) {
       if(i%100000==0 || i+1==int(nentries/theMCPrescale) ) printf("event %d out of %d\n",i+1,int(nentries/theMCPrescale));
@@ -394,10 +435,12 @@ void whAnalysis(
         vPFMET.SetMagPhi(pfmet, pfmetphi);
         deltaPhiLepMET = TMath::Abs(vLep1.DeltaPhi(vPFMET));
       }
+      double bDiscrMax = TMath::Min(Float_t(0.), Float_t(TMath::Max(jet1CSV, jet2CSV)));
+      double pfCaloBalance = TMath::Abs(pfmet-calomet)/pfmet;
       
       // Analysis booleans
       bool pass1LepSel    = (nLooseLep==1 && looseLep1IsTight && (flavor>=0));
-      bool passNjets      = (unsigned(nJet) < (jet_categories-1));
+      bool passNjets      = (unsigned(nJot) < (jet_cats-1));
       bool passLepPt      = (looseLep1Pt>=50);
       bool passMT         = (mT>=50);
       bool passMet        = (pfmet>=50);
@@ -409,56 +452,77 @@ void whAnalysis(
       // Selection booleans
       std::map<TString, bool> passAllCuts, passNMinusOne;
       passAllCuts["presel"] = pass1LepSel && passNjets && passLepPt && passMT && passMet && !passMetTight                                             ;
-      passAllCuts["sigsel"] = pass1LepSel && passNjets && passLepPt && passMT && passMet                  && passPtFrac && passDPhiLepMet && passBveto;
+      passAllCuts["sigsel"] = pass1LepSel && passNjets && passLepPt && passMT &&             passMetTight  && passPtFrac && passDPhiLepMet && passBveto;
+
+      passNMinusOne["pass1LepSel"   ] =                passNjets && passLepPt && passMT && passMetTight && passPtFrac && passDPhiLepMet && passBveto; 
+      passNMinusOne["passNjets"     ] = pass1LepSel &&              passLepPt && passMT && passMetTight && passPtFrac && passDPhiLepMet && passBveto; 
+      passNMinusOne["passLepPt"     ] = pass1LepSel && passNjets &&              passMT && passMetTight && passPtFrac && passDPhiLepMet && passBveto; 
+      passNMinusOne["passMT"        ] = pass1LepSel && passNjets && passLepPt &&           passMetTight && passPtFrac && passDPhiLepMet && passBveto; 
+      passNMinusOne["passMetTight"  ] = pass1LepSel && passNjets && passLepPt && passMT &&                 passPtFrac && passDPhiLepMet && passBveto; 
+      passNMinusOne["passPtFrac"    ] = pass1LepSel && passNjets && passLepPt && passMT && passMetTight &&               passDPhiLepMet && passBveto; 
+      passNMinusOne["passDPhiLepMet"] = pass1LepSel && passNjets && passLepPt && passMT && passMetTight && passPtFrac &&                   passBveto; 
+      passNMinusOne["passBveto"     ] = pass1LepSel && passNjets && passLepPt && passMT && passMetTight && passPtFrac && passDPhiLepMet             ; 
       
       //begin event weighting
       double totalWeight = 1;
-      if(infileCat_[ifile] != 0) {
+      if(theCategory != 0) {
         totalWeight *= normalizedWeight;
         totalWeight *= 1000. * lumi;
         totalWeight *= theMCPrescale;
         totalWeight *= sf_pu * sf_npv;
         totalWeight *= sf_lepID * sf_lepIso * sf_lepTrack;
       }
-      if(passAllCuts["presel"]) {
-        // fill preselection plots
-        histo_mT_presel  [nJet            ][infileCat_[ifile]][flavor]->Fill(mT          , totalWeight);
-        histo_mT_presel  [nJet            ][infileCat_[ifile]][2     ]->Fill(mT          , totalWeight);
-        histo_mT_presel  [jet_categories-1][infileCat_[ifile]][flavor]->Fill(mT          , totalWeight);
-        histo_mT_presel  [jet_categories-1][infileCat_[ifile]][2     ]->Fill(mT          , totalWeight);
-        histo_npv_presel [nJet            ][infileCat_[ifile]][flavor]->Fill(npv         , totalWeight);
-        histo_npv_presel [nJet            ][infileCat_[ifile]][2     ]->Fill(npv         , totalWeight);
-        histo_npv_presel [jet_categories-1][infileCat_[ifile]][flavor]->Fill(npv         , totalWeight);
-        histo_npv_presel [jet_categories-1][infileCat_[ifile]][2     ]->Fill(npv         , totalWeight);
-        histo_ptl1_presel[nJet            ][infileCat_[ifile]][flavor]->Fill(looseLep1Pt , totalWeight);
-        histo_ptl1_presel[nJet            ][infileCat_[ifile]][2     ]->Fill(looseLep1Pt , totalWeight);
-        histo_ptl1_presel[jet_categories-1][infileCat_[ifile]][flavor]->Fill(looseLep1Pt , totalWeight);
-        histo_ptl1_presel[jet_categories-1][infileCat_[ifile]][2     ]->Fill(looseLep1Pt , totalWeight);
-      }
-      if(passAllCuts["sigsel"]) {
-        // fill sig. selection plots
-        histo_mT_sigsel  [nJet            ][infileCat_[ifile]][flavor]->Fill(mT          , totalWeight);
-        histo_mT_sigsel  [nJet            ][infileCat_[ifile]][2     ]->Fill(mT          , totalWeight);
-        histo_mT_sigsel  [jet_categories-1][infileCat_[ifile]][flavor]->Fill(mT          , totalWeight);
-        histo_mT_sigsel  [jet_categories-1][infileCat_[ifile]][2     ]->Fill(mT          , totalWeight);
-        histo_ptl1_sigsel[nJet            ][infileCat_[ifile]][flavor]->Fill(looseLep1Pt , totalWeight);
-        histo_ptl1_sigsel[nJet            ][infileCat_[ifile]][2     ]->Fill(looseLep1Pt , totalWeight);
-        histo_ptl1_sigsel[jet_categories-1][infileCat_[ifile]][flavor]->Fill(looseLep1Pt , totalWeight);
-        histo_ptl1_sigsel[jet_categories-1][infileCat_[ifile]][2     ]->Fill(looseLep1Pt , totalWeight);
-      }
-
-    }
+      // fill the plots
+      for(int thePlot=0; thePlot<allPlots; thePlot++){
+        double theVar = 0.0;
+        bool makePlot = false;
+        if     (thePlot==  0 && passAllCuts  ["presel"      ]) {makePlot=true;theVar=looseLep1Pt    ;} 
+        else if(thePlot==  1 && passAllCuts  ["presel"      ]) {makePlot=true;theVar=mT             ;} 
+        else if(thePlot==  2 && passAllCuts  ["presel"      ]) {makePlot=true;theVar=pfmet          ;} 
+        else if(thePlot==  3 && passAllCuts  ["presel"      ]) {makePlot=true;theVar=looseLep1Eta   ;} 
+        else if(thePlot==  4 && passAllCuts  ["presel"      ]) {makePlot=true;theVar=jot1Pt         ;} 
+        else if(thePlot==  5 && passAllCuts  ["presel"      ]) {makePlot=true;theVar=bDiscrMax      ;} 
+        else if(thePlot==  6 && passAllCuts  ["presel"      ]) {makePlot=true;theVar=pfCaloBalance  ;} 
+        else if(thePlot==  7 && passAllCuts  ["sigsel"      ]) {makePlot=true;theVar=looseLep1Pt    ;} 
+        else if(thePlot==  8 && passAllCuts  ["sigsel"      ]) {makePlot=true;theVar=mT             ;} 
+        else if(thePlot==  9 && passAllCuts  ["sigsel"      ]) {makePlot=true;theVar=looseLep1Eta   ;} 
+        else if(thePlot== 10 && passAllCuts  ["sigsel"      ]) {makePlot=true;theVar=jot1Pt         ;} 
+        else if(thePlot== 11 && passAllCuts  ["sigsel"      ]) {makePlot=true;theVar=pfCaloBalance  ;} 
+        else if(thePlot== 12 && passNMinusOne["passPtFrac"  ]) {makePlot=true;theVar=ptFrac         ;} 
+        else if(thePlot== 13 && passNMinusOne["passMetTight"]) {makePlot=true;theVar=pfmet          ;} 
+        else if(thePlot== 14 && passNMinusOne["passBveto"   ]) {makePlot=true;theVar=bDiscrMax      ;} 
+        if(makePlot) {
+          nBinPlot = histo[thePlot][theCategory][jet_cats-1][2]->GetNbinsX();
+          xminPlot = histo[thePlot][theCategory][jet_cats-1][2]->GetBinLowEdge(1);
+          xmaxPlot = histo[thePlot][theCategory][jet_cats-1][2]->GetBinLowEdge(nBinPlot+1);
+          theVar = TMath::Min(theVar, xmaxPlot-0.001); //overflow binning
+          histo[thePlot][theCategory][nJot      ][flavor]->Fill( theVar, totalWeight);
+          histo[thePlot][theCategory][nJot      ][2     ]->Fill( theVar, totalWeight);
+          histo[thePlot][theCategory][jet_cats-1][flavor]->Fill( theVar, totalWeight);
+          histo[thePlot][theCategory][jet_cats-1][2     ]->Fill( theVar, totalWeight);
+        }
+      } // done looping over plots for filling
+    } // done looping over entries
     the_input_file->Close();
+  } // done with this flat tree file
+  char output[200];
+  sprintf(output,"MitWHAnalysis/plots%s/histo_wh_nice.root",subdirectory.c_str());
+  TFile *output_plots = new TFile(output,"RECREATE");
+  for(int thePlot=0; thePlot<allPlots; thePlot++) {
+    TDirectory *plotDir = output_plots->mkdir(plotName_[thePlot]);
+    plotDir->cd();
+    for(unsigned int i_jet=0; i_jet<jet_cats; i_jet++) {
+      TDirectory *jetDir = plotDir->mkdir(jetString_[i_jet]);
+      jetDir->cd();
+      for(unsigned int i_flav=0; i_flav<3; i_flav++) {
+        TDirectory *flavDir = jetDir->mkdir(lepString_[i_flav]);
+        flavDir->cd();
+        for(unsigned int i_type=0; i_type<process_types; i_type++) {
+          histo[thePlot][i_type][i_jet][i_flav] -> Write(categoryName_[i_type]);
+        }
+      }
+    }
   }
-  output_plots->cd();
-  for(unsigned int i_jet=0; i_jet<jet_categories; i_jet++) { for(unsigned int i_type=0; i_type<process_types; i_type++) { for(unsigned int i_flav=0; i_flav<3; i_flav++) {
-      if(i_flav<2) continue; // don't write individual electron/muon channel for right now
-      histo_mT_presel  [i_jet][i_type][i_flav] -> Write();
-      histo_npv_presel [i_jet][i_type][i_flav] -> Write();
-      histo_ptl1_presel[i_jet][i_type][i_flav] -> Write();
-      histo_mT_sigsel  [i_jet][i_type][i_flav] -> Write();
-      histo_ptl1_sigsel[i_jet][i_type][i_flav] -> Write();
-  }}}
   output_plots->Close();
 
 }

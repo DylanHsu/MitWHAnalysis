@@ -52,8 +52,7 @@ void whAnalysis(
     infileName_.push_back(Form("%sSingleTop_tW.root"    ,  filesPathMC.Data()));  infileCat_.push_back(1);
     infileName_.push_back(Form("%sSingleTop_tbarW.root" ,  filesPathMC.Data()));  infileCat_.push_back(1);
     // Single boson production
-    infileName_.push_back(Form("%sWJets_EWKWPlus.root"      , filesPathMC.Data()));  infileCat_.push_back(2);
-    infileName_.push_back(Form("%sWJets_EWKWMinus.root"     , filesPathMC.Data()));  infileCat_.push_back(2);
+    infileName_.push_back(Form("%sWJets_EWK.root"      , filesPathMC.Data()));  infileCat_.push_back(2);
     infileName_.push_back(Form("%sWJets_nlo.root"           , filesPathMC.Data()));  infileCat_.push_back(3);
     infileName_.push_back(Form("%sZJets_nlo.root"           , filesPathMC.Data()));  infileCat_.push_back(4);
     infileName_.push_back(Form("%sZJets_EWK.root"           , filesPathMC.Data()));  infileCat_.push_back(4);
@@ -103,6 +102,7 @@ void whAnalysis(
   //*******************************************************
   // Set up histograms
   //*******************************************************
+  int nBinPlot; double xminPlot, xmaxPlot;
   const int allPlots=15;
   TH1D *histo[allPlots][process_types][jet_cats][3];
   TString plotName;

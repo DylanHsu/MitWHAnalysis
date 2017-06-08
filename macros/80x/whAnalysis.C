@@ -21,7 +21,7 @@ void whAnalysis(
  string subdirectory=""
 ) {
   // Hardcoded settings
-  double mcPrescale = 1000; 
+  double mcPrescale = 1.; 
   Double_t lumi = 35.9;
   const unsigned int jet_cats=4; // 0-jet, 1-jet, 2-jet, and inclusive
   const unsigned int process_types=10; 
@@ -45,30 +45,30 @@ void whAnalysis(
   
   // MC files
     // Top backgrounds
-    infileName_.push_back(Form("%sTTbar_Powheg.root"    ,  filesPathMC.Data()));  infileCat_.push_back(1);
-    infileName_.push_back(Form("%sSingleTop_tG.root"    ,  filesPathMC.Data()));  infileCat_.push_back(1);
-    infileName_.push_back(Form("%sSingleTop_tT.root"    ,  filesPathMC.Data()));  infileCat_.push_back(1);
-    infileName_.push_back(Form("%sSingleTop_tTbar.root" ,  filesPathMC.Data()));  infileCat_.push_back(1);
-    infileName_.push_back(Form("%sSingleTop_tW.root"    ,  filesPathMC.Data()));  infileCat_.push_back(1);
-    infileName_.push_back(Form("%sSingleTop_tbarW.root" ,  filesPathMC.Data()));  infileCat_.push_back(1);
-    // Single boson production
-    infileName_.push_back(Form("%sWJets_EWK.root"      , filesPathMC.Data()));  infileCat_.push_back(2);
-    infileName_.push_back(Form("%sWJets_nlo.root"           , filesPathMC.Data()));  infileCat_.push_back(3);
-    infileName_.push_back(Form("%sZJets_nlo.root"           , filesPathMC.Data()));  infileCat_.push_back(4);
-    infileName_.push_back(Form("%sZJets_EWK.root"           , filesPathMC.Data()));  infileCat_.push_back(4);
-    infileName_.push_back(Form("%sZtoNuNu_EWK.root"         , filesPathMC.Data()));  infileCat_.push_back(4);
-    infileName_.push_back(Form("%sZtoNuNu_Zpt50to100.root"  , filesPathMC.Data()));  infileCat_.push_back(4);
-    infileName_.push_back(Form("%sZtoNuNu_Zpt100to250.root" , filesPathMC.Data()));  infileCat_.push_back(4);
-    infileName_.push_back(Form("%sZtoNuNu_Zpt250to400.root" , filesPathMC.Data()));  infileCat_.push_back(4);
-    infileName_.push_back(Form("%sZtoNuNu_Zpt400to650.root" , filesPathMC.Data()));  infileCat_.push_back(4);
-    infileName_.push_back(Form("%sZtoNuNu_Zpt650toinf.root" , filesPathMC.Data()));  infileCat_.push_back(4);
+    //infileName_.push_back(Form("%sTTbar_Powheg.root"    ,  filesPathMC.Data()));  infileCat_.push_back(1);
+    //infileName_.push_back(Form("%sSingleTop_tG.root"    ,  filesPathMC.Data()));  infileCat_.push_back(1);
+    //infileName_.push_back(Form("%sSingleTop_tT.root"    ,  filesPathMC.Data()));  infileCat_.push_back(1);
+    //infileName_.push_back(Form("%sSingleTop_tTbar.root" ,  filesPathMC.Data()));  infileCat_.push_back(1);
+    //infileName_.push_back(Form("%sSingleTop_tW.root"    ,  filesPathMC.Data()));  infileCat_.push_back(1);
+    //infileName_.push_back(Form("%sSingleTop_tbarW.root" ,  filesPathMC.Data()));  infileCat_.push_back(1);
+    //// Single boson production
+    //infileName_.push_back(Form("%sWJets_EWK.root"           , filesPathMC.Data()));  infileCat_.push_back(2);
+    //infileName_.push_back(Form("%sWJets_nlo.root"           , filesPathMC.Data()));  infileCat_.push_back(3);
+    //infileName_.push_back(Form("%sZJets_nlo.root"           , filesPathMC.Data()));  infileCat_.push_back(4);
+    //infileName_.push_back(Form("%sZJets_EWK.root"           , filesPathMC.Data()));  infileCat_.push_back(4);
+    //infileName_.push_back(Form("%sZtoNuNu_EWK.root"         , filesPathMC.Data()));  infileCat_.push_back(4);
+    //infileName_.push_back(Form("%sZtoNuNu_Zpt50to100.root"  , filesPathMC.Data()));  infileCat_.push_back(4);
+    //infileName_.push_back(Form("%sZtoNuNu_Zpt100to250.root" , filesPathMC.Data()));  infileCat_.push_back(4);
+    //infileName_.push_back(Form("%sZtoNuNu_Zpt250to400.root" , filesPathMC.Data()));  infileCat_.push_back(4);
+    //infileName_.push_back(Form("%sZtoNuNu_Zpt400to650.root" , filesPathMC.Data()));  infileCat_.push_back(4);
+    //infileName_.push_back(Form("%sZtoNuNu_Zpt650toinf.root" , filesPathMC.Data()));  infileCat_.push_back(4);
     // Diboson production
     infileName_.push_back(Form("%sDiboson_wz.root"      ,  filesPathMC.Data()));  infileCat_.push_back(5);
     infileName_.push_back(Form("%sDiboson_zz.root"      ,  filesPathMC.Data()));  infileCat_.push_back(6);
     infileName_.push_back(Form("%sDiboson_ww.root"      ,  filesPathMC.Data()));  infileCat_.push_back(7);
-    // Random crap samples
-    infileName_.push_back(Form("%sQCD.root"             ,  filesPathMC.Data()));  infileCat_.push_back(8);
-    infileName_.push_back(Form("%sGJets.root"           ,  filesPathMC.Data()));  infileCat_.push_back(8);
+    //// Random crap samples
+    //infileName_.push_back(Form("%sQCD.root"             ,  filesPathMC.Data()));  infileCat_.push_back(8);
+    //infileName_.push_back(Form("%sGJets.root"           ,  filesPathMC.Data()));  infileCat_.push_back(8);
     // Signal samples
     infileName_.push_back(Form("%sWminusH_HToInvisible_WToLNu_M125_13TeV_powheg_pythia8.root"           ,  filesPathMC.Data()));  infileCat_.push_back(9);
     infileName_.push_back(Form("%sWplusH_HToInvisible_WToLNu_M125_13TeV_powheg_pythia8.root"            ,  filesPathMC.Data()));  infileCat_.push_back(9);
@@ -78,11 +78,11 @@ void whAnalysis(
   categoryName_.push_back("Top");
   categoryName_.push_back("EWK W+jets");
   categoryName_.push_back("Cont. W+jets");
-  categoryName_.push_back("Cont. Z+jets");
+  categoryName_.push_back("Z+jets");
   categoryName_.push_back("WZ");
   categoryName_.push_back("ZZ");
   categoryName_.push_back("WW");
-  categoryName_.push_back("QCD/y+jets");
+  categoryName_.push_back("QCD, y+jets");
   categoryName_.push_back("WH(125)");
 
   jetString_.push_back("0j");
@@ -121,7 +121,7 @@ void whAnalysis(
     else if(thePlot == 10) {nBinPlot = 200; xminPlot = 0.0; xmaxPlot =1000.0;       plotName_.push_back("sigsel leading jet pT" );}
     else if(thePlot == 11) {nBinPlot = 200; xminPlot = 0.0; xmaxPlot =   4.0;       plotName_.push_back("sigsel pf calo balance");}
     else if(thePlot == 12) {nBinPlot = 200; xminPlot = 0.0; xmaxPlot =   4.0;       plotName_.push_back("N-1 lepton MET balance");}
-    else if(thePlot == 13) {nBinPlot = 200; xminPlot = 0.0; xmaxPlot =   4.0;       plotName_.push_back("N-1 max CSV2"          );}
+    else if(thePlot == 13) {nBinPlot = 100; xminPlot = 0.0; xmaxPlot =   1.0;       plotName_.push_back("N-1 max CSV2"          );}
     else if(thePlot == 14) {nBinPlot = 200; xminPlot = 0.0; xmaxPlot =1000.0;       plotName_.push_back("N-1 MET"               );}
     TH1D* histos;
     histos = new TH1D("histos", "histos", nBinPlot, xminPlot, xmaxPlot);
@@ -420,8 +420,6 @@ void whAnalysis(
       the_input_tree->GetEntry(i);
       if(nLooseLep<1) continue;
       
-      bool passPreSel=false, passSigSel=false;
-      
       // Analysis calculations
       int flavor=-1; {
         unsigned int absPdgId = TMath::Abs(looseLep1PdgId);
@@ -463,6 +461,10 @@ void whAnalysis(
       passNMinusOne["passDPhiLepMet"] = pass1LepSel && passNjets && passLepPt && passMT && passMetTight && passPtFrac &&                   passBveto; 
       passNMinusOne["passBveto"     ] = pass1LepSel && passNjets && passLepPt && passMT && passMetTight && passPtFrac && passDPhiLepMet             ; 
       
+      // debug
+      //if(passAllCuts["presel"]) printf("passed all presel cuts\n");
+      //else printf("%d %d %d %d %d %d\n",int(pass1LepSel),int(passNjets),int(passLepPt),int(passMT),int(passMet),int(!passMetTight));
+
       //begin event weighting
       double totalWeight = 1;
       if(theCategory != 0) {
@@ -489,8 +491,8 @@ void whAnalysis(
         else if(thePlot== 10 && passAllCuts  ["sigsel"      ]) {makePlot=true;theVar=jot1Pt         ;} 
         else if(thePlot== 11 && passAllCuts  ["sigsel"      ]) {makePlot=true;theVar=pfCaloBalance  ;} 
         else if(thePlot== 12 && passNMinusOne["passPtFrac"  ]) {makePlot=true;theVar=ptFrac         ;} 
-        else if(thePlot== 13 && passNMinusOne["passMetTight"]) {makePlot=true;theVar=pfmet          ;} 
-        else if(thePlot== 14 && passNMinusOne["passBveto"   ]) {makePlot=true;theVar=bDiscrMax      ;} 
+        else if(thePlot== 13 && passNMinusOne["passBveto"   ]) {makePlot=true;theVar=bDiscrMax      ;} 
+        else if(thePlot== 14 && passNMinusOne["passMetTight"]) {makePlot=true;theVar=pfmet          ;} 
         if(makePlot) {
           nBinPlot = histo[thePlot][theCategory][jet_cats-1][2]->GetNbinsX();
           xminPlot = histo[thePlot][theCategory][jet_cats-1][2]->GetBinLowEdge(1);

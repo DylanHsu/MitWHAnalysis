@@ -1,91 +1,49 @@
-#include <TROOT.h>
-#include <TFile.h>
-#include <TTree.h>
-#include <TSystem.h>
-#include <TString.h>
-#include <TH1D.h>
-#include <TH2D.h>
-#include <TMath.h>
-#include <TVector2.h>
-#include <TVector3.h>
-#include <TLorentzVector.h>
-#include <TDirectory.h>
 #include <iostream>
 #include <fstream>
+#include <TROOT.h>
+#include <TDirectory.h>
+#include <TFile.h>
+#include <TH1D.h>
+#include <TH2D.h>
+#include <TLorentzVector.h>
+#include <TMath.h>
+#include <TString.h>
+#include <TSystem.h>
+#include <TThread.h>
+#include <TTree.h>
+#include <TVector2.h>
+#include <TVector3.h>
 #include "TMVA/Reader.h"
 
-//////////////////////////////////////////////////////////
-//   This file has been automatically generated 
-//     (Mon Jun  5 17:00:40 2017 by ROOT version6.06/01)
-//   from TTree events/events
-//   found on file: Diboson_wz_0_0.root
-//////////////////////////////////////////////////////////
 void whAnalysis(
- string subdirectory=""
+ string subdirectory="",
+ TString bdtWeights="",
+ bool isBatch=false,
+ TString batchInput="",
+ Int_t batchCategory=0
 ) {
   // Hardcoded settings
   double mcPrescale = 1.; 
   Double_t lumi = 35.9;
   const unsigned int jet_cats=4; // 0-jet, 1-jet, 2-jet, and inclusive
   const unsigned int process_types=10; 
+  const unsigned int multiclassSignal=7;
   TString filesPathDA   = "/data/t3home000/dhsu/panda/merged_skims/";
   TString filesPathMC   = "/data/t3home000/dhsu/panda/merged_skims/";
+  TString weightsPath   = (isBatch? "" : "/home/dhsu/CMSSW_8_0_26_patch1/src/weights/");
   //const int MVAVarType = 1; const int nBinMVA = 8; Double_t xbins[nBinMVA+1] = {100, 125, 150, 175, 200, 250, 300, 400, 500};
-  const int MVAVarType = 2; const int nBinMVA = 10; Double_t xbins[nBinMVA+1] = {-1, 0, 0.2, 0.4, 0.6, 0.7, 0.8, 0.85, 0.9, 0.95, 1};
+  //const int MVAVarType = 2; const int nBinMVA = 10; Double_t xbins[nBinMVA+1] = {-1, 0, 0.2, 0.4, 0.6, 0.7, 0.8, 0.85, 0.9, 0.95, 1};
+  const int MVAVarType = 2; const int nBinMVA = 9; Double_t xbins[nBinMVA+1] = {0, 0.2, 0.4, 0.5, 0.54, 0.58, 0.62, 0.66, 0.7, 0.74};
 
-  string the_BDT_weights="/home/dhsu/CMSSW_8_0_26_patch1/src/weights/bdt_BDT_WHinv_presel2.weights.xml";
+  TString the_BDT_weights=weightsPath+bdtWeights;
 
   // Set up output dirs
   if(subdirectory!="" && subdirectory.c_str()[0]!='/') subdirectory = "/"+subdirectory;
   system(("mkdir -p MitWHAnalysis/datacards"+subdirectory).c_str());
   system(("mkdir -p MitWHAnalysis/plots"+subdirectory).c_str());
 
-  //*******************************************************
-  //Input Files
-  //*******************************************************
-  vector<TString> infileName_, signalName_, categoryName_, jetString_, lepString_;
-  vector<Int_t> infileCat_, signalIndex_;  
-
-  // Data files
-  infileName_.push_back(Form("%sSingleElectron.root"  ,  filesPathDA.Data()));  infileCat_.push_back(0);
-  infileName_.push_back(Form("%sSingleMuon.root"      ,  filesPathDA.Data()));  infileCat_.push_back(0);
-  
-  // MC files
-    // Top backgrounds
-    infileName_.push_back(Form("%sTTbar_Powheg.root"    ,  filesPathMC.Data()));  infileCat_.push_back(1);
-    infileName_.push_back(Form("%sSingleTop_tG.root"    ,  filesPathMC.Data()));  infileCat_.push_back(1);
-    infileName_.push_back(Form("%sSingleTop_tT.root"    ,  filesPathMC.Data()));  infileCat_.push_back(1);
-    infileName_.push_back(Form("%sSingleTop_tTbar.root" ,  filesPathMC.Data()));  infileCat_.push_back(1);
-    infileName_.push_back(Form("%sSingleTop_tW.root"    ,  filesPathMC.Data()));  infileCat_.push_back(1);
-    infileName_.push_back(Form("%sSingleTop_tbarW.root" ,  filesPathMC.Data()));  infileCat_.push_back(1);
-    // Single boson production
-    infileName_.push_back(Form("%sWJets_EWKWMinus.root"     , filesPathMC.Data()));  infileCat_.push_back(2);
-    infileName_.push_back(Form("%sWJets_EWKWPlus.root"      , filesPathMC.Data()));  infileCat_.push_back(2);
-    infileName_.push_back(Form("%sWJets_nlo.root"           , filesPathMC.Data()));  infileCat_.push_back(3);
-    infileName_.push_back(Form("%sWJets_Wpt0to50.root"      , filesPathMC.Data()));  infileCat_.push_back(3);
-    infileName_.push_back(Form("%sWJets_Wpt50to100.root"    , filesPathMC.Data()));  infileCat_.push_back(3);
-    //infileName_.push_back(Form("%sWJets_Wpt100to200.root"   , filesPathMC.Data()));  infileCat_.push_back(3);
-    //infileName_.push_back(Form("%sWJets_Wpt200toinf.root"   , filesPathMC.Data()));  infileCat_.push_back(3);
-    infileName_.push_back(Form("%sZJets_nlo.root"           , filesPathMC.Data()));  infileCat_.push_back(4);
-    infileName_.push_back(Form("%sZJets_EWK.root"           , filesPathMC.Data()));  infileCat_.push_back(4);
-    infileName_.push_back(Form("%sZtoNuNu_EWK.root"         , filesPathMC.Data()));  infileCat_.push_back(4);
-    infileName_.push_back(Form("%sZtoNuNu_Zpt50to100.root"  , filesPathMC.Data()));  infileCat_.push_back(4);
-    infileName_.push_back(Form("%sZtoNuNu_Zpt100to250.root" , filesPathMC.Data()));  infileCat_.push_back(4);
-    infileName_.push_back(Form("%sZtoNuNu_Zpt250to400.root" , filesPathMC.Data()));  infileCat_.push_back(4);
-    infileName_.push_back(Form("%sZtoNuNu_Zpt400to650.root" , filesPathMC.Data()));  infileCat_.push_back(4);
-    infileName_.push_back(Form("%sZtoNuNu_Zpt650toinf.root" , filesPathMC.Data()));  infileCat_.push_back(4);
-    // Diboson production
-    infileName_.push_back(Form("%sDiboson_wz.root"      ,  filesPathMC.Data()));  infileCat_.push_back(5);
-    infileName_.push_back(Form("%sDiboson_zz.root"      ,  filesPathMC.Data()));  infileCat_.push_back(6);
-    infileName_.push_back(Form("%sDiboson_ww.root"      ,  filesPathMC.Data()));  infileCat_.push_back(7);
-    //// Random crap samples
-    infileName_.push_back(Form("%sQCD.root"             ,  filesPathMC.Data()));  infileCat_.push_back(8);
-    infileName_.push_back(Form("%sGJets.root"           ,  filesPathMC.Data()));  infileCat_.push_back(8);
-    // Signal samples
-    infileName_.push_back(Form("%sWminusH_HToInvisible_WToLNu_M125_13TeV_powheg_pythia8.root"           ,  filesPathMC.Data()));  infileCat_.push_back(9);
-    infileName_.push_back(Form("%sWplusH_HToInvisible_WToLNu_M125_13TeV_powheg_pythia8.root"            ,  filesPathMC.Data()));  infileCat_.push_back(9);
-
   // Process types
+  vector<TString> categoryName_, jetString_, lepString_;
   categoryName_.push_back("Data");
   categoryName_.push_back("Top");
   categoryName_.push_back("EWK W+jets");
@@ -105,6 +63,51 @@ void whAnalysis(
   lepString_.push_back("e");
   lepString_.push_back("m");
   lepString_.push_back("l");
+  
+  //*******************************************************
+  //Input Files
+  //*******************************************************
+  vector<TString> infileName_; vector<Int_t> infileCat_;  
+  if(isBatch) {
+    infileName_.push_back(batchInput);
+    infileCat_.push_back(batchCategory);
+  } else {
+    // Data files
+    infileName_.push_back(Form("%sSingleElectron.root"  ,  filesPathDA.Data()));  infileCat_.push_back(0);
+    infileName_.push_back(Form("%sSingleMuon.root"      ,  filesPathDA.Data()));  infileCat_.push_back(0);
+    // MC files
+    // Top backgrounds
+    infileName_.push_back(Form("%sTTbar_Powheg.root"    ,  filesPathMC.Data()));  infileCat_.push_back(1);
+    infileName_.push_back(Form("%sSingleTop_tG.root"    ,  filesPathMC.Data()));  infileCat_.push_back(1);
+    infileName_.push_back(Form("%sSingleTop_tT.root"    ,  filesPathMC.Data()));  infileCat_.push_back(1);
+    infileName_.push_back(Form("%sSingleTop_tTbar.root" ,  filesPathMC.Data()));  infileCat_.push_back(1);
+    infileName_.push_back(Form("%sSingleTop_tW.root"    ,  filesPathMC.Data()));  infileCat_.push_back(1);
+    infileName_.push_back(Form("%sSingleTop_tbarW.root" ,  filesPathMC.Data()));  infileCat_.push_back(1);
+    // Single boson production
+    infileName_.push_back(Form("%sWJets_EWKWMinus.root"     , filesPathMC.Data()));  infileCat_.push_back(2);
+    infileName_.push_back(Form("%sWJets_EWKWPlus.root"      , filesPathMC.Data()));  infileCat_.push_back(2);
+    infileName_.push_back(Form("%sWJets_nlo.root"           , filesPathMC.Data()));  infileCat_.push_back(3);
+    infileName_.push_back(Form("%sWJets_Wpt0to50.root"      , filesPathMC.Data()));  infileCat_.push_back(3);
+    infileName_.push_back(Form("%sWJets_Wpt50to100.root"    , filesPathMC.Data()));  infileCat_.push_back(3);
+    infileName_.push_back(Form("%sZJets_nlo.root"           , filesPathMC.Data()));  infileCat_.push_back(4);
+    infileName_.push_back(Form("%sZJets_EWK.root"           , filesPathMC.Data()));  infileCat_.push_back(4);
+    infileName_.push_back(Form("%sZtoNuNu_EWK.root"         , filesPathMC.Data()));  infileCat_.push_back(4);
+    infileName_.push_back(Form("%sZtoNuNu_Zpt50to100.root"  , filesPathMC.Data()));  infileCat_.push_back(4);
+    infileName_.push_back(Form("%sZtoNuNu_Zpt100to250.root" , filesPathMC.Data()));  infileCat_.push_back(4);
+    infileName_.push_back(Form("%sZtoNuNu_Zpt250to400.root" , filesPathMC.Data()));  infileCat_.push_back(4);
+    infileName_.push_back(Form("%sZtoNuNu_Zpt400to650.root" , filesPathMC.Data()));  infileCat_.push_back(4);
+    infileName_.push_back(Form("%sZtoNuNu_Zpt650toinf.root" , filesPathMC.Data()));  infileCat_.push_back(4);
+    // Diboson production
+    infileName_.push_back(Form("%sDiboson_wz.root"      ,  filesPathMC.Data()));  infileCat_.push_back(5);
+    infileName_.push_back(Form("%sDiboson_zz.root"      ,  filesPathMC.Data()));  infileCat_.push_back(6);
+    infileName_.push_back(Form("%sDiboson_ww.root"      ,  filesPathMC.Data()));  infileCat_.push_back(7);
+    // Random crap samples
+    infileName_.push_back(Form("%sQCD.root"             ,  filesPathMC.Data()));  infileCat_.push_back(8);
+    infileName_.push_back(Form("%sGJets.root"           ,  filesPathMC.Data()));  infileCat_.push_back(8);
+    // Signal samples
+    infileName_.push_back(Form("%sWminusH_HToInvisible_WToLNu_M125_13TeV_powheg_pythia8.root"           ,  filesPathMC.Data()));  infileCat_.push_back(9);
+    infileName_.push_back(Form("%sWplusH_HToInvisible_WToLNu_M125_13TeV_powheg_pythia8.root"            ,  filesPathMC.Data()));  infileCat_.push_back(9);
+  }
 
   //Declaration of leaves types
   Int_t nJet, nJot, nLooseLep, nLooseElectron, nLooseMuon, nTightLep, nTightElectron, nTightMuon, looseLep1PdgId, looseLep2PdgId, looseLep1IsTight, looseLep2IsTight, nTau, jot1VBFID, jetNMBtags, nB, isGS, looseLep1IsHLTSafe, looseLep2IsHLTSafe, runNumber, lumiNumber, npv, pu, trigger, metFilter, egmFilter, genTopIsHad, genAntiTopIsHad, nIsoJet, jet1Flav, jet1IsTight, jet2Flav, isojet1Flav, isojet2Flav, jetNBtags, isojetNBtags, nFatjet, nHF, nLoosePhoton, nTightPhoton, loosePho1IsTight, nAwayPFCH, nTransversePFCH, nTowardPFCH;
@@ -580,7 +583,8 @@ void whAnalysis(
       double Uperp = pfUmag*TMath::Sin(pfUphi - looseLep1Phi);
       double bdt_value=-1;
       if(useBDT) {
-        if(MVAVarType==2) bdt_value = reader->EvaluateMVA("BDT");
+        if(MVAVarType==2) bdt_value = (reader->EvaluateMulticlass(multiclassSignal, "BDT"));
+        //printf("bdt_value=%f\n", bdt_value);
       }
 
       double MVAVar=-1;
@@ -588,18 +592,34 @@ void whAnalysis(
       else if(MVAVarType==2) MVAVar=bdt_value;
 
       // Analysis booleans
-      bool pass1LepSel    = (nLooseLep==1 && looseLep1IsTight && (flavor>=0));
-      bool passNjets      = nJot==0; //(unsigned(nJot) < (jet_cats-1));
-      bool passLepPt      = (looseLep1Pt>=50);
-      bool passMT         = (mT>=50);
-      bool passMet        = (pfmet>=50);
-      bool passMetTight   = (pfmet>=100);
-      bool passPtFrac     = (ptFrac > 0.4 && ptFrac < 1.5);
-      bool passDPhiLepMet = (deltaPhiLepMET > 2);
-      bool passDPhiJetMet = true; //(deltaPhiJetMET > 0.5) || (deltaPhiJetMET == -1);
-      //bool passDRLepJet   = (deltaRJetLep < 4.5) || (deltaRJetLep == -1);
-      bool passBveto      = true; //jetNBtags==0 && jet1CSV<0.5426 && jet2CSV<0.5426;
-       
+      bool pass1LepSel, passNjets, passLepPt, passMT, passMet, passMetTight, passPtFrac, passDPhiLepMet, passDPhiJetMet, passBveto;
+      switch(MVAVarType) {
+        case 1:
+          pass1LepSel    = (nLooseLep==1 && looseLep1IsTight && (flavor>=0));
+          passNjets      = (unsigned(nJot) < (jet_cats-1));
+          passLepPt      = (looseLep1Pt>=50);
+          passMT         = (mT>=50);
+          passMet        = (pfmet>=50);
+          passMetTight   = (pfmet>=100);
+          passPtFrac     = (ptFrac > 0.4 && ptFrac < 1.5);
+          passDPhiLepMet = (deltaPhiLepMET > 2.5);
+          passDPhiJetMet = (deltaPhiJetMET > 0.5) || (deltaPhiJetMET == -1);
+          passBveto      = jetNBtags==0 && jet1CSV<0.5426 && jet2CSV<0.5426;
+          break;
+        case 2:
+          // testing 0-jet category for multiclass BDT
+          pass1LepSel    = (nLooseLep==1 && looseLep1IsTight && (flavor>=0));
+          passNjets      = nJot==0; //(unsigned(nJot) < (jet_cats-1));
+          passLepPt      = (looseLep1Pt>=50);
+          passMT         = (mT>=50);
+          passMet        = (pfmet>=50);
+          passMetTight   = (pfmet>=100);
+          passPtFrac     = (ptFrac > 0.4 && ptFrac < 1.5);
+          passDPhiLepMet = (deltaPhiLepMET > 2);
+          passDPhiJetMet = true;
+          passBveto      = true;
+          break;
+      } 
       
       // Selection booleans
       std::map<TString, bool> passAllCuts, passNMinusOne;
@@ -706,8 +726,9 @@ void whAnalysis(
     } // done looping over entries
     the_input_file->Close();
   } // done with this flat tree file
-  char output[200];
-  sprintf(output,"MitWHAnalysis/plots%s/histo_wh_nice.root",subdirectory.c_str());
+  char output[400];
+  if(isBatch) sprintf(output,"histo_wh_nice_%s",batchInput.Data());
+  else        sprintf(output,"MitWHAnalysis/plots%s/histo_wh_nice.root",subdirectory.c_str());
   TFile *output_plots = new TFile(output,"RECREATE");
   for(int thePlot=0; thePlot<allPlots; thePlot++) {
     TDirectory *plotDir = output_plots->mkdir(plotName_[thePlot]);

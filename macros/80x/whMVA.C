@@ -18,7 +18,7 @@ void whMVA(unsigned int mode=1, string extra_string="") {
   // Initialize the factory
   system("mkdir -p MitWHAnalysis/mva");
   if(mode==1) {
-    output_file=TFile::Open(("MitWHAnalysis/mva/training_result_BDT_WHinv_simple"+(extra_string == "" ? "" : "_"+extra_string)+".root").c_str(), "RECREATE");
+    output_file=TFile::Open(("MitWHAnalysis/mva/training_result_BDT_WHinv_"+(extra_string == "" ? "" : "_"+extra_string)+".root").c_str(), "RECREATE");
     factory = new TMVA::Factory("bdt", output_file, "V:!Silent:DrawProgressBar:AnalysisType=Multiclass");
   } else return;
 
@@ -39,47 +39,58 @@ void whMVA(unsigned int mode=1, string extra_string="") {
   // Determine the input trees
   vector<TString> infileName_, categoryName_;
   vector<Int_t> infileCat_;  
-  categoryName_.push_back("Data");
-  categoryName_.push_back("Top");
-  categoryName_.push_back("EWK W+jets");
-  categoryName_.push_back("Cont. W+jets");
-  categoryName_.push_back("Z+jets");
-  categoryName_.push_back("WZ");
-  categoryName_.push_back("ZZ");
-  categoryName_.push_back("WW");
-  categoryName_.push_back("QCD, y+jets");
+  //categoryName_.push_back("Signal");
+  //categoryName_.push_back("Top");
+  //categoryName_.push_back("EWK W+jets");
+  //categoryName_.push_back("Cont. W+jets");
+  //categoryName_.push_back("Z+jets");
+  //categoryName_.push_back("WZ");
+  //categoryName_.push_back("ZZ");
+  //categoryName_.push_back("WW");
+  //categoryName_.push_back("QCD, y+jets");
   categoryName_.push_back("Signal");
+  categoryName_.push_back("W+jets");
+  categoryName_.push_back("Z+jets");
+  categoryName_.push_back("VV");
   
-  infileName_.push_back(Form("%sTTbar_Powheg.root"                                         , filesPathMC.Data())); infileCat_.push_back(1);
-  infileName_.push_back(Form("%sSingleTop_tG.root"                                         , filesPathMC.Data())); infileCat_.push_back(1);
-  infileName_.push_back(Form("%sSingleTop_tT.root"                                         , filesPathMC.Data())); infileCat_.push_back(1);
-  infileName_.push_back(Form("%sSingleTop_tTbar.root"                                      , filesPathMC.Data())); infileCat_.push_back(1);
-  infileName_.push_back(Form("%sSingleTop_tW.root"                                         , filesPathMC.Data())); infileCat_.push_back(1);
-  infileName_.push_back(Form("%sSingleTop_tbarW.root"                                      , filesPathMC.Data())); infileCat_.push_back(1);
+  infileName_.push_back(Form("%sWminusH_HToInvisible_WToLNu_M125_13TeV_powheg_pythia8.root", filesPathMC.Data())); infileCat_.push_back(0);
+  infileName_.push_back(Form("%sWplusH_HToInvisible_WToLNu_M125_13TeV_powheg_pythia8.root" , filesPathMC.Data())); infileCat_.push_back(0);
   
-  infileName_.push_back(Form("%sWJets_EWKWMinus.root"                                      , filesPathMC.Data())); infileCat_.push_back(2);
-  infileName_.push_back(Form("%sWJets_EWKWPlus.root"                                       , filesPathMC.Data())); infileCat_.push_back(2);
+  //infileName_.push_back(Form("%sTTbar_Powheg.root"                                         , filesPathMC.Data())); infileCat_.push_back(1);
+  //infileName_.push_back(Form("%sSingleTop_tG.root"                                         , filesPathMC.Data())); infileCat_.push_back(1);
+  //infileName_.push_back(Form("%sSingleTop_tT.root"                                         , filesPathMC.Data())); infileCat_.push_back(1);
+  //infileName_.push_back(Form("%sSingleTop_tTbar.root"                                      , filesPathMC.Data())); infileCat_.push_back(1);
+  //infileName_.push_back(Form("%sSingleTop_tW.root"                                         , filesPathMC.Data())); infileCat_.push_back(1);
+  //infileName_.push_back(Form("%sSingleTop_tbarW.root"                                      , filesPathMC.Data())); infileCat_.push_back(1);
   
-  infileName_.push_back(Form("%sWJets_Wpt0to50.root"                                       , filesPathMC.Data())); infileCat_.push_back(3);
-  infileName_.push_back(Form("%sWJets_Wpt50to100.root"                                     , filesPathMC.Data())); infileCat_.push_back(3);
-  infileName_.push_back(Form("%sWJets_nlo.root"                                            , filesPathMC.Data())); infileCat_.push_back(3);
+  infileName_.push_back(Form("%sWJets_EWKWMinus.root"                                      , filesPathMC.Data())); infileCat_.push_back(1);
+  infileName_.push_back(Form("%sWJets_EWKWPlus.root"                                       , filesPathMC.Data())); infileCat_.push_back(1);
   
-  infileName_.push_back(Form("%sZJets_nlo.root"                                            , filesPathMC.Data())); infileCat_.push_back(4);
-  infileName_.push_back(Form("%sZJets_EWK.root"                                            , filesPathMC.Data())); infileCat_.push_back(4);
-  infileName_.push_back(Form("%sZtoNuNu_EWK.root"                                          , filesPathMC.Data())); infileCat_.push_back(4);
-  infileName_.push_back(Form("%sZtoNuNu_Zpt50to100.root"                                   , filesPathMC.Data())); infileCat_.push_back(4);
-  infileName_.push_back(Form("%sZtoNuNu_Zpt100to250.root"                                  , filesPathMC.Data())); infileCat_.push_back(4);
-  infileName_.push_back(Form("%sZtoNuNu_Zpt250to400.root"                                  , filesPathMC.Data())); infileCat_.push_back(4);
-  infileName_.push_back(Form("%sZtoNuNu_Zpt400to650.root"                                  , filesPathMC.Data())); infileCat_.push_back(4);
-  infileName_.push_back(Form("%sZtoNuNu_Zpt650toinf.root"                                  , filesPathMC.Data())); infileCat_.push_back(4);
+  infileName_.push_back(Form("%sWJets_Wpt0to50.root"                                       , filesPathMC.Data())); infileCat_.push_back(1);
+  infileName_.push_back(Form("%sWJets_Wpt50to100.root"                                     , filesPathMC.Data())); infileCat_.push_back(1);
+  infileName_.push_back(Form("%sWJets_pt100to250.root"                                     , filesPathMC.Data())); infileCat_.push_back(1);
+  infileName_.push_back(Form("%sWJets_pt250to400.root"                                     , filesPathMC.Data())); infileCat_.push_back(1);
+  infileName_.push_back(Form("%sWJets_pt400to600.root"                                     , filesPathMC.Data())); infileCat_.push_back(1);
+  infileName_.push_back(Form("%sWJets_pt600toinf.root"                                     , filesPathMC.Data())); infileCat_.push_back(1);
 
-  infileName_.push_back(Form("%sDiboson_wz.root"                                           , filesPathMC.Data())); infileCat_.push_back(5);
-  infileName_.push_back(Form("%sDiboson_zz.root"                                           , filesPathMC.Data())); infileCat_.push_back(6);
-  infileName_.push_back(Form("%sDiboson_ww.root"                                           , filesPathMC.Data())); infileCat_.push_back(7);
+  infileName_.push_back(Form("%sZJets_pt50to100.root"                                      , filesPathMC.Data())); infileCat_.push_back(2);
+  infileName_.push_back(Form("%sZJets_pt100to250.root"                                     , filesPathMC.Data())); infileCat_.push_back(2);
+  infileName_.push_back(Form("%sZJets_pt250to400.root"                                     , filesPathMC.Data())); infileCat_.push_back(2);
+  infileName_.push_back(Form("%sZJets_pt400to650.root"                                     , filesPathMC.Data())); infileCat_.push_back(2);
+  infileName_.push_back(Form("%sZJets_pt650toinf.root"                                     , filesPathMC.Data())); infileCat_.push_back(2);
+  infileName_.push_back(Form("%sZJets_EWK.root"                                            , filesPathMC.Data())); infileCat_.push_back(2);
+  infileName_.push_back(Form("%sZtoNuNu_EWK.root"                                          , filesPathMC.Data())); infileCat_.push_back(2);
+  infileName_.push_back(Form("%sZtoNuNu_Zpt50to100.root"                                   , filesPathMC.Data())); infileCat_.push_back(2);
+  infileName_.push_back(Form("%sZtoNuNu_Zpt100to250.root"                                  , filesPathMC.Data())); infileCat_.push_back(2);
+  infileName_.push_back(Form("%sZtoNuNu_Zpt250to400.root"                                  , filesPathMC.Data())); infileCat_.push_back(2);
+  infileName_.push_back(Form("%sZtoNuNu_Zpt400to650.root"                                  , filesPathMC.Data())); infileCat_.push_back(2);
+  infileName_.push_back(Form("%sZtoNuNu_Zpt650toinf.root"                                  , filesPathMC.Data())); infileCat_.push_back(2);
+
+  infileName_.push_back(Form("%sDiboson_wz.root"                                           , filesPathMC.Data())); infileCat_.push_back(3);
+  infileName_.push_back(Form("%sDiboson_zz.root"                                           , filesPathMC.Data())); infileCat_.push_back(3);
+  infileName_.push_back(Form("%sDiboson_ww.root"                                           , filesPathMC.Data())); infileCat_.push_back(3);
   //infileName_.push_back(Form("%sQCD.root"                                                  , filesPathMC.Data())); infileCat_.push_back(8);
   //infileName_.push_back(Form("%sGJets.root"                                                , filesPathMC.Data())); infileCat_.push_back(8);
-  infileName_.push_back(Form("%sWminusH_HToInvisible_WToLNu_M125_13TeV_powheg_pythia8.root", filesPathMC.Data())); infileCat_.push_back(9);
-  infileName_.push_back(Form("%sWplusH_HToInvisible_WToLNu_M125_13TeV_powheg_pythia8.root" , filesPathMC.Data())); infileCat_.push_back(9);
 
   TTree *the_trees[64]; TFile *the_files[64]; Int_t iCat=-1;
   for(unsigned int ifile=0; ifile<infileName_.size(); ifile++) {
@@ -89,10 +100,11 @@ void whMVA(unsigned int mode=1, string extra_string="") {
     if(!the_trees[ifile]) { printf("problem with file %s\n", infileName_[ifile].Data()); assert(0); return; }
     //printf("calling factory->AddTree(the_trees[%d], \"%s\")\n", ifile, categoryName_[infileCat_[ifile]].Data());
     factory->AddTree(the_trees[ifile], categoryName_[infileCat_[ifile]].Data());
-    if(infileCat_[ifile] > iCat) {
-      iCat=infileCat_[ifile];
-      factory->SetWeightExpression("normalizedWeight * 35900. * sf_npv * sf_lepID * sf_lepIso * sf_lepTrack", categoryName_[infileCat_[ifile]].Data());
-    }
+    // if(infileCat_[ifile] > iCat) {
+    //   iCat=infileCat_[ifile];
+    //   factory->SetWeightExpression("normalizedWeight * 35900. * sf_npv * sf_lepID * sf_lepIso * sf_lepTrack", categoryName_[infileCat_[ifile]].Data());
+    // }
+    factory->SetWeightExpression("normalizedWeight * 35900. * sf_npv * sf_lepID * sf_lepIso * sf_lepTrack", categoryName_[infileCat_[ifile]].Data());
   }
   //factory->SetWeightExpression("normalizedWeight * 35900. * sf_npv * sf_lepID * sf_lepIso * sf_lepTrack");
   if(mode==1) {
@@ -121,10 +133,11 @@ void whMVA(unsigned int mode=1, string extra_string="") {
     factory->AddVariable( "PFCH3Phi"               , "#phi PFCH3"                     , ""  , 'F');
 
     //TCut preselectionCut = "nJot==0";
-    TCut preselectionCut = "nJot==0 && looseLep1Pt/pfmet>0.4 && looseLep1Pt/pfmet<1.5 && TMath::Abs(TVector2::Phi_mpi_pi(pfmetphi-looseLep1Phi))>2"; // presel2
-    //TCut preselectionCut = "nJot==0 && looseLep1Pt/pfmet>0.4 && looseLep1Pt/pfmet<1.5 && TMath::Abs(TVector2::Phi_mpi_pi(pfmetphi-looseLep1Phi))>2.5 && pfmet>100"; // sigsel 1
+    //TCut preselectionCut = "nJot==0 && looseLep1Pt/pfmet>0.4 && looseLep1Pt/pfmet<1.5 && TMath::Abs(TVector2::Phi_mpi_pi(pfmetphi-looseLep1Phi))>2"; // presel2
+    TCut preselectionCut = "nJot==0 && looseLep1Pt/pfmet>0.4 && looseLep1Pt/pfmet<1.5 && TMath::Abs(TVector2::Phi_mpi_pi(pfmetphi-looseLep1Phi))>2.5 && pfmet>100"; // sigsel 1
     factory->PrepareTrainingAndTestTree(preselectionCut, "");
-    factory->BookMethod( TMVA::Types::kBDT, "BDT_WHinv"+(extra_string == "" ? "" : "_"+extra_string), "!H:!V:NTrees=500:MinNodeSize=5%:MaxDepth=5:BoostType=Grad:Shrinkage=0.10:UseBaggedBoost:BaggedSampleFraction=0.50:nCuts=10000:PruneMethod=NoPruning");
+    //factory->BookMethod( TMVA::Types::kBDT, "BDT_WHinv"+(extra_string == "" ? "" : "_"+extra_string), "!H:!V:NTrees=500:MinNodeSize=5%:MaxDepth=5:BoostType=Grad:Shrinkage=0.10:UseBaggedBoost:BaggedSampleFraction=0.50:nCuts=10000:PruneMethod=NoPruning");
+    factory->BookMethod( TMVA::Types::kBDT, "BDT_WHinv"+(extra_string == "" ? "" : "_"+extra_string), "!H:!V:NTrees=400:MinNodeSize=5%:MaxDepth=4:BoostType=Grad:Shrinkage=0.10:UseBaggedBoost:BaggedSampleFraction=0.50:nCuts=10000:PruneMethod=NoPruning");
   }
 
   factory->TrainAllMethods();

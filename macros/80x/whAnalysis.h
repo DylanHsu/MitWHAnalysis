@@ -16,7 +16,8 @@
 #include <TString.h>
 //const int MVAVarType = 1; const int nBinMVA = 8; Double_t xbins[nBinMVA+1] = {100, 125, 150, 175, 200, 250, 300, 400, 500};
 //const int MVAVarType = 2; const int nBinMVA = 10; Double_t xbins[nBinMVA+1] = {-1, 0, 0.2, 0.4, 0.6, 0.7, 0.8, 0.85, 0.9, 0.95, 1};
-const int MVAVarType = 2; const int nBinMVA = 9; Double_t xbins[nBinMVA+1] = {0, 0.2, 0.4, 0.5, 0.54, 0.58, 0.62, 0.66, 0.7, 0.74};
+//const int MVAVarType = 2; const int nBinMVA = 9; Double_t xbins[nBinMVA+1] = {0, 0.2, 0.4, 0.5, 0.54, 0.58, 0.62, 0.66, 0.7, 0.74};
+const int MVAVarType = 2; const int nBinMVA = 9; Double_t xbins[nBinMVA+1] = {0.2, 0.4, 0.5, 0.6, 0.65, 0.70, 0.75, 0.8, 0.85, 0.9};
 const unsigned int jet_cats=4; // 0-jet, 1-jet, 2-jet, and inclusive
 const unsigned int process_types=10; 
 const unsigned int multiclassSignal=0;

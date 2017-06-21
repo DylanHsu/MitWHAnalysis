@@ -7,10 +7,12 @@ void whAnalysis(
  TString bdtWeights="",
  bool isBatch=false,
  TString batchInput="",
- Int_t batchCategory=0
+ Int_t batchCategory=0,
+ Int_t batchStart=0,
+ Int_t batchPrescale=100
 ) {
   // Hardcoded settings
-  double mcPrescale = 1.; 
+  double mcPrescale = 1.;
   Double_t lumi = 35.9;
   TString filesPathDA   = "/data/t3home000/dhsu/panda/merged_skims/";
   TString filesPathMC   = "/data/t3home000/dhsu/panda/merged_skims/";
@@ -57,11 +59,11 @@ void whAnalysis(
     infileName_.push_back(Form("%sWJets_pt250to400.root"    , filesPathMC.Data()));  infileCat_.push_back(3);
     infileName_.push_back(Form("%sWJets_pt400to600.root"    , filesPathMC.Data()));  infileCat_.push_back(3);
     infileName_.push_back(Form("%sWJets_pt600toinf.root"    , filesPathMC.Data()));  infileCat_.push_back(3);
-    infileName_.push_back(Form("%sZJets_pt50to100"          , filesPathMC.Data()));  infileCat_.push_back(4);
-    infileName_.push_back(Form("%sZJets_pt100to250"         , filesPathMC.Data()));  infileCat_.push_back(4);
-    infileName_.push_back(Form("%sZJets_pt250to400"         , filesPathMC.Data()));  infileCat_.push_back(4);
-    infileName_.push_back(Form("%sZJets_pt400to650"         , filesPathMC.Data()));  infileCat_.push_back(4);
-    infileName_.push_back(Form("%sZJets_pt650toinf"         , filesPathMC.Data()));  infileCat_.push_back(4);
+    infileName_.push_back(Form("%sZJets_pt50to100.root"     , filesPathMC.Data()));  infileCat_.push_back(4);
+    infileName_.push_back(Form("%sZJets_pt100to250.root"    , filesPathMC.Data()));  infileCat_.push_back(4);
+    infileName_.push_back(Form("%sZJets_pt250to400.root"    , filesPathMC.Data()));  infileCat_.push_back(4);
+    infileName_.push_back(Form("%sZJets_pt400to650.root"    , filesPathMC.Data()));  infileCat_.push_back(4);
+    infileName_.push_back(Form("%sZJets_pt650toinf.root"    , filesPathMC.Data()));  infileCat_.push_back(4);
     infileName_.push_back(Form("%sZJets_EWK.root"           , filesPathMC.Data()));  infileCat_.push_back(4);
     infileName_.push_back(Form("%sZtoNuNu_EWK.root"         , filesPathMC.Data()));  infileCat_.push_back(4);
     infileName_.push_back(Form("%sZtoNuNu_Zpt50to100.root"  , filesPathMC.Data()));  infileCat_.push_back(4);
@@ -148,9 +150,9 @@ void whAnalysis(
   // Set up trees (if batch mode)
   //*******************************************************
   char output[400];
-  if(isBatch) sprintf(output,"histo_wh_nice_%s",batchInput.Data());
+  if(isBatch) sprintf(output,"wh_batchTree_%d_%s",batchStart,batchInput.Data());
   else        sprintf(output,"MitWHAnalysis/plots%s/histo_wh_nice.root",subdirectory.c_str());
-  TFile *output_plots = new TFile(output,"RECREATE","",0);
+  TFile *output_plots = new TFile(output,"RECREATE","",ROOT::CompressionSettings(ROOT::kZLIB,9));
   UInt_t nBinPlot; Float_t xminPlot, xmaxPlot;
   UChar_t batch_nJot, batch_flavor, batch_category;
   UInt_t thePlot;
@@ -252,8 +254,8 @@ void whAnalysis(
         histo[thePlot][i_type][i_jet][i_flav] = (TH1D*) histos->Clone(Form("%s %s (%s,%s)",plotName_[thePlot].Data(), categoryName_[i_type].Data(), jetString_[i_jet].Data(), lepString_[i_flav].Data()));
         histo[thePlot][i_type][i_jet][i_flav]->SetDirectory(0);
       }}}
-      histos->Reset();histos->Clear();
     }
+    histos->Reset();histos->Clear();
   }
 
   //*******************************************************
@@ -521,6 +523,7 @@ void whAnalysis(
     if(theCategory == 0) theMCPrescale = 1.0;
     // Loop over events in the file
     for (int i=0; i<int(nentries/theMCPrescale); ++i) {
+      if(isBatch && i%batchPrescale != batchStart) continue;
       if(i%100000==0 || i+1==int(nentries/theMCPrescale) ) printf("event %d out of %d\n",i+1,int(nentries/theMCPrescale));
       the_input_tree->GetEntry(i);
       if(nLooseLep<1) continue;
@@ -588,7 +591,7 @@ void whAnalysis(
           passMet        = (pfmet>=50);
           passMetTight   = (pfmet>=100);
           passPtFrac     = (ptFrac > 0.4 && ptFrac < 1.5);
-          passDPhiLepMet = (deltaPhiLepMET > 2);
+          passDPhiLepMet = (deltaPhiLepMET > 2.5);
           passDPhiJetMet = true;
           passBveto      = true;
           break;
@@ -775,7 +778,7 @@ void plotsFromBatchTree(
   printf("scanning batch tree...\n");
   Long64_t nentries=tree_batchPlots->GetEntries();
   for(Long64_t i=0; i<nentries; i++) {
-    if(i%1000000==0 || i+1==nentries ) printf("event %lld out of %lld\n",i+1,nentries);
+    if(i%100000000==0 || i+1==nentries ) printf("event %lld out of %lld\n",i+1,nentries);
     tree_batchPlots->GetEntry(i);
     histo[thePlot][batch_category][batch_nJot][batch_flavor]->Fill(theVar, totalWeight);
     histo[thePlot][batch_category][batch_nJot][0           ]->Fill(theVar, totalWeight);
